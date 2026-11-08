@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <iterator>
 #include <memory>
 
 #include "../Source/AudioEngine/SampleLoader.h"
@@ -737,6 +738,49 @@ processor.setPadAdjustment (0, -48.0f, 0.0f, 0);
 
         check (processor.getDrumKit().name == "Test Kit", "async kit load publishes the kit");
         check (processor.getDrumStatusText().contains ("Test Kit"), "kit status text reports the kit");
+
+        // Factory drum presets must resolve their bundled kit JSON and samples
+        // from the test app's Resources folder, just as they do in the plugin.
+        const char* factoryKitPresets[] { "Afrobeats Kit", "Amapiano Kit", "Gospel Percussion",
+                                          "Highlife Kit", "Afro Percussion" };
+        const char* factoryKitNames[] { "Afrobeats Essentials", "Amapiano Bounce", "Afro Gospel Praise",
+                                        "Highlife Guitar Band", "Afro Percussion Ensemble" };
+
+        for (int i = 0; i < (int) std::size (factoryKitPresets); ++i)
+        {
+            const auto presetIndex = processor.findPresetByName (factoryKitPresets[i]);
+            check (presetIndex >= 0, juce::String ("factory drum preset exists: ") + factoryKitPresets[i]);
+
+            if (presetIndex < 0)
+                continue;
+
+            const auto revision = processor.getDrumKitRevision();
+            processor.applyPreset (presetIndex);
+
+            for (int attempt = 0; attempt < 300 && processor.getDrumKitRevision() == revision; ++attempt)
+            {
+                juce::Thread::sleep (10);
+                processor.pollSampleLoad();
+            }
+
+            const auto& factoryKit = processor.getDrumKit();
+            check (factoryKit.name == factoryKitNames[i],
+                   juce::String (factoryKitPresets[i]) + " loads its bundled kit map");
+            check (factoryKit.getNumLoadedPads() == halloweth::DrumKit::numPads
+                       && processor.getDrumErrorText().isEmpty(),
+                   juce::String (factoryKitPresets[i]) + " resolves all 16 bundled samples"
+                       + (processor.getDrumErrorText().isNotEmpty()
+                              ? " (" + processor.getDrumErrorText() + ")"
+                              : juce::String()));
+
+            midi.addEvent (juce::MidiMessage::noteOn (1, halloweth::DrumKit::firstNote,
+                                                       (juce::uint8) 110), 0);
+            renderBlock (processor, buffer, midi);
+            check (buffer.getMagnitude (0, 0, blockSize) > 0.0001f,
+                   juce::String (factoryKitPresets[i]) + " plays audio from its first pad");
+            midi.addEvent (juce::MidiMessage::allNotesOff (1), 0);
+            renderBlock (processor, buffer, midi);
+        }
 
         const auto savedFile = folder.getChildFile ("saved-kit.json");
         check (processor.saveDrumKit (savedFile), "kit saves to disk");
