@@ -445,6 +445,12 @@ void HallowethAudioProcessor::loadInstrumentForPreset (const PresetLoadResult& r
     if (result.instrumentPath.isEmpty())
         return;
 
+    if (result.instrumentIsDrumKit)
+    {
+        loadDrumKitAsync (resolveBundledInstrument (result.instrumentPath));
+        return;
+    }
+
     if (result.instrumentIsSfz)
     {
         loadSfzFileAsync (resolveBundledInstrument (result.instrumentPath));

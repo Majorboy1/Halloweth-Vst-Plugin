@@ -36,8 +36,17 @@ patches with its own oscillators, filter, LFO, and effects.
 
 ## Afrobeats drum sources
 
+HALLOWETH now ships five 16-pad kits, including **Afrobeats Essentials**,
+**Amapiano Bounce**, **Afro Gospel Praise**, **Afro Percussion Ensemble**, and
+**Highlife Guitar Band**. Their kicks, snares, hats, hand drums, and
+percussion are curated from the CC0 [Versilian Community Sample Library](https://github.com/sgossner/VCSL).
+Sample provenance, the pinned source revision, and the license are bundled in
+[`Resources/DrumKits`](../Resources/DrumKits/README.md). Load **Afrobeats Kit**,
+**Amapiano Kit**, **Highlife Kit**, **Gospel Percussion**, or **Afro Percussion**
+from the preset browser to start playing.
+
 - [LABADI's Afrobeats one-shots](https://soundza.com/packs/afrobeats-drum-and-percussion-one-shots)
-  is a free 24-bit WAV source for percussion-heavy kits. Its Soundza Standard
+  is a commercial 24-bit WAV source for percussion-heavy kits. Its Soundza Standard
   License permits use in finished tracks but forbids redistribution as a kit,
   so the source is documented for users rather than copied into Halloweth.
 - [Splice's Afrobeats drum catalog](https://splice.com/sounds/genres/afrobeat/drums/samples)
@@ -45,5 +54,4 @@ patches with its own oscillators, filter, LFO, and effects.
   repackaging as a plugin library.
 
 Load a legally obtained WAV pack onto the DRUMS page's 16 pads, then save the
-kit in Halloweth's JSON format. More detail is in
-[`Resources/DrumKits/Afrobeats/README.md`](../Resources/DrumKits/Afrobeats/README.md).
+kit in Halloweth's JSON format. This also lets you customize the bundled kits.

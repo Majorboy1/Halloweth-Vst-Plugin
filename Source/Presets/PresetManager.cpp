@@ -25,9 +25,24 @@ namespace
     {
         const auto isGuitar = juce::String (definition.category) == "Guitars";
         const auto isBundledPiano = juce::String (definition.name) == "Meta Upright Piano";
+        const auto presetName = juce::String (definition.name);
+        const auto isBundledDrumKit = presetName == "Afrobeats Kit"
+                                      || presetName == "Amapiano Kit"
+                                      || presetName == "Gospel Percussion"
+                                      || presetName == "Highlife Kit"
+                                      || presetName == "Afro Percussion";
         const auto guitarMap = juce::String (definition.name).contains ("Steel")
                                    ? "steel-guitar/steel-guitar.json"
                                    : "nylon-guitar/nylon-guitar.json";
+        const auto drumKitPath = presetName == "Amapiano Kit"
+                                     ? "DrumKits/Amapiano/kit.json"
+                                 : presetName == "Highlife Kit"
+                                     ? "DrumKits/Highlife/kit.json"
+                                 : presetName == "Gospel Percussion"
+                                     ? "DrumKits/Gospel/kit.json"
+                                 : presetName == "Afro Percussion"
+                                     ? "DrumKits/AfroPercussion/kit.json"
+                                     : "DrumKits/Afrobeats/kit.json";
 
         juce::DynamicObject::Ptr root (new juce::DynamicObject());
         root->setProperty ("name", definition.name);
@@ -40,9 +55,12 @@ namespace
                               ? "@HALLOWETH_RESOURCE:GuitarSamples/" + juce::String (guitarMap)
                               : isBundledPiano
                                   ? "@HALLOWETH_RESOURCE:PianoSamples/meta-piano/meta-piano.sfz"
+                                  : isBundledDrumKit
+                                      ? "@HALLOWETH_RESOURCE:" + juce::String (drumKitPath)
                                   : juce::String());
         root->setProperty ("instrumentIsMap", isGuitar);
         root->setProperty ("instrumentIsSfz", isBundledPiano);
+        root->setProperty ("instrumentIsDrumKit", isBundledDrumKit);
         root->setProperty ("isFactory", true);
 
         juce::DynamicObject::Ptr parameters (new juce::DynamicObject());
@@ -234,6 +252,7 @@ PresetLoadResult PresetManager::applyPreset (int index, juce::AudioProcessorValu
     result.instrumentPath = data.getProperty ("instrumentPath", juce::var()).toString();
     result.instrumentIsMap = (bool) data.getProperty ("instrumentIsMap", false);
     result.instrumentIsSfz = (bool) data.getProperty ("instrumentIsSfz", false);
+    result.instrumentIsDrumKit = (bool) data.getProperty ("instrumentIsDrumKit", false);
 
     if (auto* modeParameter = apvts.getParameter (param::engineMode))
         modeParameter->setValueNotifyingHost (modeParameter->convertTo0to1 ((float) result.engineMode));

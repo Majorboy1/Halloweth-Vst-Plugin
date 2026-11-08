@@ -1,0 +1,117 @@
+{
+    "name":  "Highlife Guitar Band",
+    "pads":  [
+                 {
+                     "pan":  0,
+                     "gainDb":  -4,
+                     "pitch":  0,
+                     "name":  "Bass Drum",
+                     "file":  "../FactorySamples/Kick.wav"
+                 },
+                 {
+                     "pan":  0,
+                     "gainDb":  -6,
+                     "pitch":  0,
+                     "name":  "Snare",
+                     "file":  "../FactorySamples/Snare.wav"
+                 },
+                 {
+                     "pan":  0,
+                     "gainDb":  -4,
+                     "pitch":  1,
+                     "name":  "Cross Stick",
+                     "file":  "../FactorySamples/Snare-Rim.wav"
+                 },
+                 {
+                     "pan":  -0.15,
+                     "gainDb":  -8,
+                     "pitch":  0,
+                     "name":  "Closed Hat",
+                     "file":  "../FactorySamples/Hat-Closed.wav"
+                 },
+                 {
+                     "pan":  0.15,
+                     "gainDb":  -9,
+                     "pitch":  0,
+                     "name":  "Open Hat",
+                     "file":  "../FactorySamples/Hat-Open.wav"
+                 },
+                 {
+                     "pan":  -0.2,
+                     "gainDb":  -6,
+                     "pitch":  0,
+                     "name":  "Conga Slap",
+                     "file":  "../FactorySamples/Conga-Slap.wav"
+                 },
+                 {
+                     "pan":  0.2,
+                     "gainDb":  -6,
+                     "pitch":  0,
+                     "name":  "Conga Open",
+                     "file":  "../FactorySamples/Conga-Open.wav"
+                 },
+                 {
+                     "pan":  -0.25,
+                     "gainDb":  -7,
+                     "pitch":  0,
+                     "name":  "Bongo Low",
+                     "file":  "../FactorySamples/Bongo-Low.wav"
+                 },
+                 {
+                     "pan":  0.25,
+                     "gainDb":  -7,
+                     "pitch":  0,
+                     "name":  "Bongo High",
+                     "file":  "../FactorySamples/Bongo-High.wav"
+                 },
+                 {
+                     "pan":  0,
+                     "gainDb":  -6,
+                     "pitch":  0,
+                     "name":  "Tumba",
+                     "file":  "../FactorySamples/Tumba-Open.wav"
+                 },
+                 {
+                     "pan":  0,
+                     "gainDb":  -8,
+                     "pitch":  0,
+                     "name":  "Claves",
+                     "file":  "../FactorySamples/Claves.wav"
+                 },
+                 {
+                     "pan":  -0.2,
+                     "gainDb":  -8,
+                     "pitch":  0,
+                     "name":  "Agogo Low",
+                     "file":  "../FactorySamples/Agogo-Low.wav"
+                 },
+                 {
+                     "pan":  0.2,
+                     "gainDb":  -8,
+                     "pitch":  0,
+                     "name":  "Agogo High",
+                     "file":  "../FactorySamples/Agogo-High.wav"
+                 },
+                 {
+                     "pan":  0,
+                     "gainDb":  -9,
+                     "pitch":  0,
+                     "name":  "Cowbell",
+                     "file":  "../FactorySamples/Cowbell.wav"
+                 },
+                 {
+                     "pan":  -0.2,
+                     "gainDb":  -11,
+                     "pitch":  0,
+                     "name":  "Cabasa",
+                     "file":  "../FactorySamples/Cabasa.wav"
+                 },
+                 {
+                     "pan":  0.2,
+                     "gainDb":  -10,
+                     "pitch":  0,
+                     "name":  "Tambourine",
+                     "file":  "../FactorySamples/Tambourine.wav"
+                 }
+             ]
+}

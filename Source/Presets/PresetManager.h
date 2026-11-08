@@ -27,6 +27,7 @@ struct PresetLoadResult
     juce::String instrumentPath;
     bool instrumentIsMap = false;
     bool instrumentIsSfz = false;
+    bool instrumentIsDrumKit = false;
     int engineMode = 1;
 };
 

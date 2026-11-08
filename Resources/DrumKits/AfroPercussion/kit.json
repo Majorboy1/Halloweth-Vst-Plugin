@@ -1,0 +1,117 @@
+{
+    "name":  "Afro Percussion Ensemble",
+    "pads":  [
+                 {
+                     "pan":  0,
+                     "gainDb":  -4,
+                     "pitch":  -4,
+                     "name":  "Tumba Low",
+                     "file":  "../FactorySamples/Tumba-Open.wav"
+                 },
+                 {
+                     "pan":  0,
+                     "gainDb":  -6,
+                     "pitch":  0,
+                     "name":  "Tumba Mid",
+                     "file":  "../FactorySamples/Tumba-Open.wav"
+                 },
+                 {
+                     "pan":  0,
+                     "gainDb":  -7,
+                     "pitch":  5,
+                     "name":  "Tumba High",
+                     "file":  "../FactorySamples/Tumba-Open.wav"
+                 },
+                 {
+                     "pan":  -0.2,
+                     "gainDb":  -4,
+                     "pitch":  0,
+                     "name":  "Conga Slap",
+                     "file":  "../FactorySamples/Conga-Slap.wav"
+                 },
+                 {
+                     "pan":  0.2,
+                     "gainDb":  -5,
+                     "pitch":  0,
+                     "name":  "Conga Open",
+                     "file":  "../FactorySamples/Conga-Open.wav"
+                 },
+                 {
+                     "pan":  0,
+                     "gainDb":  -6,
+                     "pitch":  0,
+                     "name":  "Quinto",
+                     "file":  "../FactorySamples/Quinto-Open.wav"
+                 },
+                 {
+                     "pan":  -0.2,
+                     "gainDb":  -6,
+                     "pitch":  0,
+                     "name":  "Bongo Low",
+                     "file":  "../FactorySamples/Bongo-Low.wav"
+                 },
+                 {
+                     "pan":  0.2,
+                     "gainDb":  -6,
+                     "pitch":  0,
+                     "name":  "Bongo High",
+                     "file":  "../FactorySamples/Bongo-High.wav"
+                 },
+                 {
+                     "pan":  0,
+                     "gainDb":  -8,
+                     "pitch":  0,
+                     "name":  "Bongo Muted",
+                     "file":  "../FactorySamples/Bongo-High-Muted.wav"
+                 },
+                 {
+                     "pan":  -0.2,
+                     "gainDb":  -10,
+                     "pitch":  0,
+                     "name":  "Shaker Down",
+                     "file":  "../FactorySamples/Shaker-Down.wav"
+                 },
+                 {
+                     "pan":  0.2,
+                     "gainDb":  -10,
+                     "pitch":  0,
+                     "name":  "Shaker Up",
+                     "file":  "../FactorySamples/Shaker-Up.wav"
+                 },
+                 {
+                     "pan":  0,
+                     "gainDb":  -11,
+                     "pitch":  0,
+                     "name":  "Cabasa",
+                     "file":  "../FactorySamples/Cabasa.wav"
+                 },
+                 {
+                     "pan":  0,
+                     "gainDb":  -8,
+                     "pitch":  0,
+                     "name":  "Claves",
+                     "file":  "../FactorySamples/Claves.wav"
+                 },
+                 {
+                     "pan":  -0.2,
+                     "gainDb":  -7,
+                     "pitch":  0,
+                     "name":  "Agogo Low",
+                     "file":  "../FactorySamples/Agogo-Low.wav"
+                 },
+                 {
+                     "pan":  0.2,
+                     "gainDb":  -7,
+                     "pitch":  0,
+                     "name":  "Agogo High",
+                     "file":  "../FactorySamples/Agogo-High.wav"
+                 },
+                 {
+                     "pan":  0,
+                     "gainDb":  -9,
+                     "pitch":  0,
+                     "name":  "Cowbell",
+                     "file":  "../FactorySamples/Cowbell.wav"
+                 }
+             ]
+}

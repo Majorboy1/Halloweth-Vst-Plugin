@@ -193,22 +193,22 @@ namespace
         { "Cowbell Lift", "Percussion", "Highlife", "Cutting cowbell accent for rhythmic lifts and hooks.",
           1, 0, 0, 11000, 1.3f, 0, 0, 0, 0, 0, 80, 10, 100, 2, false },
 
-        // ---- Drum kits needing user samples ---------------------------------
+        // ---- Bundled performance kits ---------------------------------------
         { "Afrobeats Kit", "Drums", "Afrobeats",
-          "16-pad performance kit for kicks, snares, claps, and hats - load your own samples for the full kit.",
-          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, true },
+          "Ready-to-play 16-pad groove kit with punchy drums, hand percussion, shakers, and agogo bells.",
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, false },
         { "Amapiano Kit", "Drums", "Amapiano",
-          "Modern Amapiano kit with log drums, rim hits, shaker and punchy percussion.",
-          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, true },
+          "Deep tuned kick, hand drums, shakers, and bright accents for log-drum grooves.",
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, false },
         { "Gospel Percussion", "Drums", "Afro Gospel",
-          "Live perkussion kit with congas, tambourine, shaker and rim patterns.",
-          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, true },
+          "Expressive hand-drum, tambourine, shaker, and rim palette for Afro Gospel grooves.",
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, false },
         { "Highlife Kit", "Drums", "Highlife",
-          "Highlife groove kit with signature cowbell, snare, conga, and hand percussion hits.",
-          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, true },
+          "Bright band-style drums with cowbell, agogo, conga, cabasa, and tambourine.",
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, false },
         { "Afro Percussion", "Drums", "Afro Fusion",
-          "Hand drum set with shekere, agogo, conga and talking-drum textures.",
-          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, true }
+          "A performance-ready blend of conga, bongo, shaker, guiro, and bell colors.",
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, false }
     };
 }
 

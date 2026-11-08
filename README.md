@@ -24,7 +24,7 @@ Cinematic hybrid synth and premium world-instrument platform — VST3 for Window
 | Multisample maps: key ranges, velocity layers, round robin, one-shot | implemented |
 | CC0 sampled upright piano: all 88 keys, four velocity layers, SFZ | implemented |
 | SFZ instruments: sfizz, async loading, MIDI events, block rendering, state recall | implemented; tested with a basic SFZ map |
-| 16-pad drum kit: per-pad level, pan, tuning, one-shot, kit JSON save/load | implemented |
+| 16-pad drum kit: per-pad level, pan, tuning, one-shot, kit JSON save/load | implemented; includes five CC0 factory kits |
 | Two-oscillator synth: PolyBLEP saw/square, sine, triangle, TPT filter | implemented |
 | Synth sound design: filter envelope, LFO, sub oscillator, stereo spread | implemented |
 | Engine switching (sample map / synth / drums / SFZ) | implemented |
@@ -182,7 +182,7 @@ Tests/
   AudioEngineTests.cpp      Engine, MIDI, preset and state tests
 ThirdParty/JUCE/            JUCE 8.0.8 (not redistributed with binaries)
 Resources/PianoSamples/     CC0 Meta Piano SFZ and OGG samples
-Resources/DrumKits/         External Afrobeats sample-pack sources
+Resources/DrumKits/         CC0 Afrobeats, Amapiano, and Highlife factory kits
 ```
 
 ## 6. Presets
@@ -194,8 +194,8 @@ Factory presets live in code; user presets are JSON files in
   whole bank; the star toggles a favourite.
 - **PRESETS** page: search, category and genre filters, double-click to load,
   save the current state as a user preset, delete user presets, import/export JSON.
-- Presets marked **NEEDS SAMPLE** (the drum kits) require audio you supply — the plugin
-  never pretends those recordings exist.
+- The factory drum kits load their bundled CC0 samples automatically; use the DRUMS
+  page to audition, retune, replace, clear, and save pad assignments.
 
 ## 7. Threading and real-time rules
 
@@ -242,7 +242,8 @@ Omnisphere or other proprietary sample content is copied, extracted or redistrib
 - Effects run as one serial master chain; there is no per-instrument routing yet.
 - Implemented effects: reverb, delay, chorus, low/high-pass filter, drive, compressor,
   stereo width. Phaser, flanger, EQ, transient shaping, stutter and reverse are not built.
-- Drum kits save to JSON, but there are no factory kits (no audio content).
+- Bundled kits use curated general-purpose CC0 percussion; producers can load their own
+  sounds and save customized JSON kits.
 - Key ranges and velocity layers are hard-switched; there are no velocity crossfades.
 - Zone selection falls back to any readable zone when nothing matches a note.
 - Samples longer than 120 seconds are truncated; there is no streaming.
