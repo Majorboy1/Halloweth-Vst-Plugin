@@ -140,6 +140,10 @@ namespace
           1, 6, 34, 2800, 0.9f, 0, 24, 48, 0, 4, 260, 32, 320, 1, false },
         { "Halloweth Chorus", "Guitar Synths", "Cinematic", "Synthesized layered guitar-inspired chorus tone.",
           2, 14, 46, 5100, 1.1f, 0, 42, 58, 22, 14, 850, 60, 960, 1, false },
+        { "Afrobeat Pocket Chords", "Other Sounds", "Afrobeat", "Recorded Epiphone guitar power, minor and major barre-chord voicings, selected with keyswitches.",
+          0, 0, 0, 12000, 0.707f, 0, 0, 0, 0, 4, 180, 80, 500, 3, false },
+        { "Clean Highlife Guitar", "Other Sounds", "Highlife", "Recorded Epiphone guitar notes with pick attack, fret noise and repeated performances.",
+          0, 0, 0, 12000, 0.707f, 0, 0, 0, 0, 4, 180, 80, 500, 3, false },
 
         // ---- Piano and keys ------------------------------------------------
         { "Grand Piano", "Piano", "Classical", "Smooth grand-piano texture with a gentle attack and bloom.",

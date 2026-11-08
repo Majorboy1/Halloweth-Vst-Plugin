@@ -243,6 +243,44 @@ int main()
          renderBlock (processor, buffer, midi);
     }
 
+    const auto afroGuitarPreset = processor.findPresetByName ("Afrobeat Pocket Chords");
+    check (afroGuitarPreset >= 0, "real guitar performance is available in Other Sounds");
+    if (afroGuitarPreset >= 0)
+    {
+        check (processor.getPresetInfo (afroGuitarPreset).category == "Other Sounds",
+               "recorded guitar preset is filed under Other Sounds");
+        processor.applyPreset (afroGuitarPreset);
+        check (std::abs (processor.apvts.getRawParameterValue (halloweth::param::engineMode)->load() - 3.0f) < 0.01f,
+               "recorded guitar performance selects the SFZ sample engine");
+
+        for (int attempt = 0; attempt < 1000 && processor.getSfzNumRegions() == 0; ++attempt)
+        {
+            juce::Thread::sleep (10);
+            processor.pollSampleLoad();
+        }
+
+        check (processor.getSfzNumRegions() > 0,
+               "Afrobeat chord guitar loads its recorded SFZ sample regions");
+    }
+
+    const auto highlifeGuitarPreset = processor.findPresetByName ("Clean Highlife Guitar");
+    check (highlifeGuitarPreset >= 0, "melodic recorded guitar is available in Other Sounds");
+    if (highlifeGuitarPreset >= 0)
+    {
+        processor.applyPreset (highlifeGuitarPreset);
+        for (int attempt = 0; attempt < 1000 && processor.getSfzNumRegions() == 0; ++attempt)
+        {
+            juce::Thread::sleep (10);
+            processor.pollSampleLoad();
+        }
+
+        juce::MidiBuffer sfzMidi;
+        sfzMidi.addEvent (juce::MidiMessage::noteOn (1, 60, (juce::uint8) 100), 0);
+        renderBlock (processor, buffer, sfzMidi);
+        check (buffer.getMagnitude (0, 0, blockSize) > 0.001f,
+               "recorded highlife guitar sample produces audio through the SFZ engine");
+    }
+
     processor.applyPreset (0);   // Warm Pad: triangle wave, 2200 Hz cutoff
     check (processor.getCurrentPresetIndex() == 0, "current preset index updates");
 

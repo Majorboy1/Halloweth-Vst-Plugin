@@ -26,6 +26,8 @@ namespace
         const auto isGuitar = juce::String (definition.category) == "Guitars";
         const auto isBundledPiano = juce::String (definition.name) == "Meta Upright Piano";
         const auto presetName = juce::String (definition.name);
+        const auto isEmilyGuitar = presetName == "Afrobeat Pocket Chords"
+                                   || presetName == "Clean Highlife Guitar";
         const auto isBundledDrumKit = presetName == "Afrobeats Kit"
                                       || presetName == "Amapiano Kit"
                                       || presetName == "Gospel Percussion"
@@ -50,16 +52,19 @@ namespace
         root->setProperty ("genre", definition.genre);
         root->setProperty ("description", definition.description);
         root->setProperty ("needsSample", definition.needsSample);
-        root->setProperty ("engineMode", isGuitar ? 0 : isBundledPiano ? 3 : definition.engineMode);
+        root->setProperty ("engineMode", isGuitar ? 0 : (isBundledPiano || isEmilyGuitar) ? 3 : definition.engineMode);
         root->setProperty ("instrumentPath", isGuitar
                               ? "@HALLOWETH_RESOURCE:GuitarSamples/" + juce::String (guitarMap)
                               : isBundledPiano
                                   ? "@HALLOWETH_RESOURCE:PianoSamples/meta-piano/meta-piano.sfz"
+                              : isEmilyGuitar
+                                  ? juce::String ("@HALLOWETH_RESOURCE:GuitarSamples/OtherSounds/Emilyguitar/")
+                                      + (presetName == "Afrobeat Pocket Chords" ? "emily_chords.sfz" : "emily_basic.sfz")
                                   : isBundledDrumKit
                                       ? "@HALLOWETH_RESOURCE:" + juce::String (drumKitPath)
                                   : juce::String());
         root->setProperty ("instrumentIsMap", isGuitar);
-        root->setProperty ("instrumentIsSfz", isBundledPiano);
+        root->setProperty ("instrumentIsSfz", isBundledPiano || isEmilyGuitar);
         root->setProperty ("instrumentIsDrumKit", isBundledDrumKit);
         root->setProperty ("isFactory", true);
 
