@@ -8,7 +8,7 @@
 
 #include "Instruments/InstrumentLoader.h"
 
-namespace afronova
+namespace halloweth
 {
 /** Which engine is currently audible. */
 enum class EngineMode

@@ -3,7 +3,7 @@
 #include "FactoryPresets.h"
 #include "Parameters/ParameterIDs.h"
 
-namespace afronova
+namespace halloweth
 {
 namespace
 {
@@ -81,7 +81,7 @@ PresetManager::PresetManager()
 juce::File PresetManager::getPresetFolder()
 {
     auto folder = juce::File::getSpecialLocation (juce::File::userApplicationDataDirectory)
-                      .getChildFile ("Afronova")
+                      .getChildFile ("Halloweth")
                       .getChildFile ("Presets");
 
     if (! folder.exists())

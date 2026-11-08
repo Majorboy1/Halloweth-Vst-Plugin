@@ -5,7 +5,7 @@
 #include <array>
 #include <vector>
 
-namespace afronova
+namespace halloweth
 {
 /** Snapshot of the effect settings, published once per block. */
 struct EffectParameters

@@ -1,13 +1,13 @@
 # Sample map format
 
-AFRONOVA instruments are described by plain JSON so you can author, version and share
+HALLOWETH instruments are described by plain JSON so you can author, version and share
 them. A map points at WAV/AIFF files that **you** own or have licensed.
 
 ## Important
 
 `example-multisample.json` is a **template**. The sample files it references do not exist
 and are not shipped with this project. Replace the paths with your own recordings before
-loading it — otherwise AFRONOVA reports the missing files and refuses to use that map.
+loading it — otherwise HALLOWETH reports the missing files and refuses to use that map.
 
 ## Zone fields
 

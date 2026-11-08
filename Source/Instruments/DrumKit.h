@@ -6,7 +6,7 @@
 
 #include "SampleMap.h"
 
-namespace afronova
+namespace halloweth
 {
 /** One of the 16 drum pads. Pad i answers to MIDI note 36 + i. */
 struct DrumPad

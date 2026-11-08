@@ -14,24 +14,24 @@
 #include "Parameters/ParameterIDs.h"
 #include "Presets/PresetManager.h"
 
-namespace afronova
+namespace halloweth
 {
 class SfzEngine;
 class SfzInstrument;
 
 /**
-    AFRONOVA audio processor.
+    HALLOWETH audio processor.
 
     Phases 1-5: plugin shell, sample engine, multisample maps, drum kit, synth
     engine, effect chain and a preset system. All file reading happens on worker
     threads; the audio callback never allocates or touches the filesystem.
 */
-class AfronovaAudioProcessor : public juce::AudioProcessor,
+class HallowethAudioProcessor : public juce::AudioProcessor,
                                private juce::Timer
 {
 public:
-    AfronovaAudioProcessor();
-    ~AfronovaAudioProcessor() override;
+    HallowethAudioProcessor();
+    ~HallowethAudioProcessor() override;
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -42,7 +42,7 @@ public:
     juce::AudioProcessorEditor* createEditor() override;
     bool hasEditor() const override { return true; }
 
-    const juce::String getName() const override { return "AFRONOVA"; }
+    const juce::String getName() const override { return "HALLOWETH"; }
     bool acceptsMidi() const override        { return true; }
     bool producesMidi() const override       { return false; }
     bool isMidiEffect() const override       { return false; }
@@ -191,6 +191,6 @@ private:
     bool hasDrumInstrument = false;
     std::atomic<int> drumKitRevision { 0 };
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AfronovaAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HallowethAudioProcessor)
 };
 }

@@ -3,9 +3,9 @@
 #include "../../PluginProcessor.h"
 #include "../Theme.h"
 
-namespace afronova
+namespace halloweth
 {
-DrumsPage::DrumsPage (AfronovaAudioProcessor& p) : processor (p)
+DrumsPage::DrumsPage (HallowethAudioProcessor& p) : processor (p)
 {
     for (int i = 0; i < DrumKit::numPads; ++i)
     {
@@ -185,7 +185,7 @@ void DrumsPage::saveKitFile()
 
     fileChooser = std::make_unique<juce::FileChooser> (
         "Save drum kit as JSON",
-        juce::File::getSpecialLocation (juce::File::userMusicDirectory).getChildFile ("afronova-kit.json"),
+        juce::File::getSpecialLocation (juce::File::userMusicDirectory).getChildFile ("halloweth-kit.json"),
         "*.json");
 
     fileChooser->launchAsync (juce::FileBrowserComponent::saveMode

@@ -9,7 +9,7 @@
 #include "DrumKit.h"
 #include "AudioEngine/SampleData.h"
 
-namespace afronova
+namespace halloweth
 {
 /** A zone with its audio resolved. data is null when the file could not be read. */
 struct LoadedZone

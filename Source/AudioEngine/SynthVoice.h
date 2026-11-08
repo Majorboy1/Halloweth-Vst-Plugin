@@ -2,7 +2,7 @@
 
 #include <juce_audio_basics/juce_audio_basics.h>
 
-namespace afronova
+namespace halloweth
 {
 class AudioEngine;
 

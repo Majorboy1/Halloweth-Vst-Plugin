@@ -5,7 +5,7 @@
 
 #include <array>
 
-#include "UI/AfronovaLookAndFeel.h"
+#include "UI/HallowethLookAndFeel.h"
 #include "UI/NavigationBar.h"
 #include "UI/Pages/DrumsPage.h"
 #include "UI/Pages/EffectsPage.h"
@@ -15,16 +15,16 @@
 #include "UI/Pages/PlaceholderPage.h"
 #include "UI/PresetBar.h"
 
-namespace afronova
+namespace halloweth
 {
-class AfronovaAudioProcessor;
+class HallowethAudioProcessor;
 
-class AfronovaAudioProcessorEditor : public juce::AudioProcessorEditor,
+class HallowethAudioProcessorEditor : public juce::AudioProcessorEditor,
                                     private juce::Timer
 {
 public:
-    explicit AfronovaAudioProcessorEditor (AfronovaAudioProcessor&);
-    ~AfronovaAudioProcessorEditor() override;
+    explicit HallowethAudioProcessorEditor (HallowethAudioProcessor&);
+    ~HallowethAudioProcessorEditor() override;
 
     void paint (juce::Graphics&) override;
     void resized() override;
@@ -33,8 +33,8 @@ private:
     void timerCallback() override;
     void showPage (NavigationBar::Page);
 
-    AfronovaAudioProcessor& processor;
-    AfronovaLookAndFeel lookAndFeel;
+    HallowethAudioProcessor& processor;
+    HallowethLookAndFeel lookAndFeel;
 
     NavigationBar navBar;
     PresetBar presetBar;
@@ -52,6 +52,6 @@ private:
 
     float displayPeak = 0.0f;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AfronovaAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HallowethAudioProcessorEditor)
 };
 }

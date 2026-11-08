@@ -1,7 +1,7 @@
 #include "LabeledKnob.h"
 #include "../Theme.h"
 
-namespace afronova
+namespace halloweth
 {
 LabeledKnob::LabeledKnob (const juce::String& labelText,
                           juce::AudioProcessorValueTreeState& stateToUse,

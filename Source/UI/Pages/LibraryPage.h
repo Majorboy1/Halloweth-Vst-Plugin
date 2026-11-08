@@ -5,9 +5,9 @@
 
 #include <vector>
 
-namespace afronova
+namespace halloweth
 {
-class AfronovaAudioProcessor;
+class HallowethAudioProcessor;
 
 /** Sound library: grouped browsing, favourites and preset management in one place.
 
@@ -18,7 +18,7 @@ class AfronovaAudioProcessor;
 class LibraryPage : public juce::Component
 {
 public:
-    explicit LibraryPage (AfronovaAudioProcessor&);
+    explicit LibraryPage (HallowethAudioProcessor&);
     ~LibraryPage() override;
 
     void paint (juce::Graphics&) override;
@@ -72,7 +72,7 @@ private:
     int getSelectedSoundIndex() const;
     juce::Rectangle<int> getStarBounds (int width, int height) const;
 
-    AfronovaAudioProcessor& processor;
+    HallowethAudioProcessor& processor;
 
     GroupModel groupModel { *this };
     SoundModel soundModel { *this };

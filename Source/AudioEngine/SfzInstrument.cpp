@@ -1,6 +1,6 @@
 #include "SfzInstrument.h"
 
-namespace afronova
+namespace halloweth
 {
 std::unique_ptr<SfzInstrument> SfzInstrument::loadFromFile (const juce::File& file,
                                                             double newSampleRate,

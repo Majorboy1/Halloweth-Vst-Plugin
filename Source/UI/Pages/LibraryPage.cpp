@@ -3,7 +3,7 @@
 #include "../../PluginProcessor.h"
 #include "../Theme.h"
 
-namespace afronova
+namespace halloweth
 {
 namespace
 {
@@ -12,7 +12,7 @@ namespace
 }
 
 //==============================================================================
-LibraryPage::LibraryPage (AfronovaAudioProcessor& p) : processor (p)
+LibraryPage::LibraryPage (HallowethAudioProcessor& p) : processor (p)
 {
     groupList.setRowHeight (30);
     groupList.setColour (juce::ListBox::backgroundColourId, theme::panelRaised);

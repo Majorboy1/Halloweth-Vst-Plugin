@@ -3,9 +3,9 @@
 #include "PluginProcessor.h"
 #include "UI/Theme.h"
 
-namespace afronova
+namespace halloweth
 {
-AfronovaAudioProcessorEditor::AfronovaAudioProcessorEditor (AfronovaAudioProcessor& p)
+HallowethAudioProcessorEditor::HallowethAudioProcessorEditor (HallowethAudioProcessor& p)
     : AudioProcessorEditor (&p),
       processor (p),
       presetBar (p),
@@ -62,13 +62,13 @@ AfronovaAudioProcessorEditor::AfronovaAudioProcessorEditor (AfronovaAudioProcess
     startTimerHz (30);
 }
 
-AfronovaAudioProcessorEditor::~AfronovaAudioProcessorEditor()
+HallowethAudioProcessorEditor::~HallowethAudioProcessorEditor()
 {
     stopTimer();
     setLookAndFeel (nullptr);
 }
 
-void AfronovaAudioProcessorEditor::showPage (NavigationBar::Page page)
+void HallowethAudioProcessorEditor::showPage (NavigationBar::Page page)
 {
     const auto index = juce::jlimit (0, (int) NavigationBar::Page::numPages - 1,
                                      NavigationBar::toIndex (page));
@@ -81,7 +81,7 @@ void AfronovaAudioProcessorEditor::showPage (NavigationBar::Page page)
         libraryPage.refresh();
 }
 
-void AfronovaAudioProcessorEditor::timerCallback()
+void HallowethAudioProcessorEditor::timerCallback()
 {
     const auto peak = processor.getOutputPeak();
     displayPeak = juce::jmax (peak, displayPeak * 0.88f);
@@ -93,7 +93,7 @@ void AfronovaAudioProcessorEditor::timerCallback()
     presetBar.setMidiActive (processor.getActiveVoiceCount() > 0);
 }
 
-void AfronovaAudioProcessorEditor::paint (juce::Graphics& g)
+void HallowethAudioProcessorEditor::paint (juce::Graphics& g)
 {
     const auto bounds = getLocalBounds().toFloat();
 
@@ -117,7 +117,7 @@ void AfronovaAudioProcessorEditor::paint (juce::Graphics& g)
     }
 }
 
-void AfronovaAudioProcessorEditor::resized()
+void HallowethAudioProcessorEditor::resized()
 {
     auto area = getLocalBounds();
 

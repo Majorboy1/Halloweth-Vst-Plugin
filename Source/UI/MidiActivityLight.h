@@ -2,7 +2,7 @@
 
 #include <juce_gui_basics/juce_gui_basics.h>
 
-namespace afronova
+namespace halloweth
 {
 /** Small MIDI activity lamp. The editor drives it from the processor's live
     voice count, so it reflects real note activity rather than a timer loop. */

@@ -3,9 +3,9 @@
 #include "../PluginProcessor.h"
 #include "Theme.h"
 
-namespace afronova
+namespace halloweth
 {
-PresetBar::PresetBar (AfronovaAudioProcessor& p) : processor (p)
+PresetBar::PresetBar (HallowethAudioProcessor& p) : processor (p)
 {
     auto setUp = [this] (juce::TextButton& button, const juce::String& text)
     {

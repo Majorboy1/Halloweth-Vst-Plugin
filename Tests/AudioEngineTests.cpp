@@ -23,7 +23,7 @@ void check (bool condition, const juce::String& what)
         ++failures;
 }
 
-void renderBlock (afronova::AfronovaAudioProcessor& processor,
+void renderBlock (halloweth::HallowethAudioProcessor& processor,
                   juce::AudioBuffer<float>& buffer,
                   juce::MidiBuffer& midi)
 {
@@ -32,7 +32,7 @@ void renderBlock (afronova::AfronovaAudioProcessor& processor,
     midi.clear();
 }
 
-std::shared_ptr<const afronova::SampleData> makeSine (double frequency, double sampleRate,
+std::shared_ptr<const halloweth::SampleData> makeSine (double frequency, double sampleRate,
                                                       double seconds, const juce::String& name,
                                                       int rootNote = 60)
 {
@@ -44,7 +44,7 @@ std::shared_ptr<const afronova::SampleData> makeSine (double frequency, double s
         data[i] = 0.5f * (float) std::sin (juce::MathConstants<double>::twoPi
                                           * frequency * (double) i / sampleRate);
 
-    return afronova::SampleLoader::fromBuffer (std::move (buffer), sampleRate, rootNote, name);
+    return halloweth::SampleLoader::fromBuffer (std::move (buffer), sampleRate, rootNote, name);
 }
 
 bool writeWav (const juce::File& file, float frequency, double sampleRate, double seconds)
@@ -96,9 +96,9 @@ int main()
     constexpr double sampleRate = 44100.0;
     constexpr int blockSize = 512;
 
-    std::cout << "AFRONOVA engine tests" << std::endl;
+    std::cout << "HALLOWETH engine tests" << std::endl;
 
-    afronova::AfronovaAudioProcessor processor;
+    halloweth::HallowethAudioProcessor processor;
     processor.setPlayConfigDetails (0, 2, sampleRate, blockSize);
     processor.prepareToPlay (sampleRate, blockSize);
 
@@ -124,8 +124,8 @@ int main()
         processor.audioEngine.reset();
         renderBlock (processor, buffer, midi);
 
-        setParamReal (afronova::param::attack, 0.0f);
-        setParamReal (afronova::param::loopEnabled, 0.0f);
+        setParamReal (halloweth::param::attack, 0.0f);
+        setParamReal (halloweth::param::loopEnabled, 0.0f);
 
         midi.addEvent (juce::MidiMessage::noteOn (1, note, (juce::uint8) 100), 0);
 
@@ -161,10 +161,10 @@ int main()
     check (buffer.getMagnitude (0, 0, blockSize) < 1.0e-6f, "silent output with no MIDI input");
 
     // ---------------------------------------------------------------- synth engine
-    setChoice (afronova::param::engineMode, 1);   // synth
-    setParamReal (afronova::param::synthDetune, 0.0f);
-    setParamReal (afronova::param::synthMix, 0.0f);
-    setChoice (afronova::param::synthWave, 0);    // saw
+    setChoice (halloweth::param::engineMode, 1);   // synth
+    setParamReal (halloweth::param::synthDetune, 0.0f);
+    setParamReal (halloweth::param::synthMix, 0.0f);
+    setChoice (halloweth::param::synthWave, 0);    // saw
 
     midi.addEvent (juce::MidiMessage::noteOn (1, 60, (juce::uint8) 100), 0);
     renderBlock (processor, buffer, midi);
@@ -215,7 +215,7 @@ int main()
     check (guitarPreset >= 0, "guitar palette is available");
 
     processor.applyPreset (guitarPreset);
-    const auto guitarMode = processor.apvts.getRawParameterValue (afronova::param::engineMode)->load();
+    const auto guitarMode = processor.apvts.getRawParameterValue (halloweth::param::engineMode)->load();
     check (std::abs (guitarMode) < 0.01f, "guitar preset selects the recorded sample engine");
 
     for (int attempt = 0; attempt < 300 && processor.getLoadedInstrument() == nullptr; ++attempt)
@@ -245,10 +245,10 @@ int main()
     processor.applyPreset (0);   // Warm Pad: triangle wave, 2200 Hz cutoff
     check (processor.getCurrentPresetIndex() == 0, "current preset index updates");
 
-    const auto presetWave = processor.apvts.getRawParameterValue (afronova::param::synthWave)->load();
+    const auto presetWave = processor.apvts.getRawParameterValue (halloweth::param::synthWave)->load();
     check (std::abs (presetWave - 3.0f) < 0.01f, "preset applies its parameters (triangle wave)");
 
-    const auto presetCutoff = processor.apvts.getRawParameterValue (afronova::param::synthCutoff)->load();
+    const auto presetCutoff = processor.apvts.getRawParameterValue (halloweth::param::synthCutoff)->load();
     check (std::abs (presetCutoff - 2200.0f) < 1.0f, "preset applies cutoff");
 
     processor.selectNextPreset (-1);
@@ -262,10 +262,10 @@ int main()
 
     {
         const auto countBefore = processor.getNumPresets();
-        processor.saveCurrentAsPreset ("AFRONOVA Unit Test Preset", "User", "Test", "unit test");
+        processor.saveCurrentAsPreset ("HALLOWETH Unit Test Preset", "User", "Test", "unit test");
         check (processor.getNumPresets() == countBefore + 1, "user preset is saved");
 
-        const auto userIndex = processor.findPresetByName ("AFRONOVA Unit Test Preset");
+        const auto userIndex = processor.findPresetByName ("HALLOWETH Unit Test Preset");
         check (userIndex >= 0, "saved preset can be found by name");
 
         if (userIndex >= 0)
@@ -281,12 +281,12 @@ int main()
     processor.getStateInformation (saved);
 
     {
-        afronova::AfronovaAudioProcessor restored;
+        halloweth::HallowethAudioProcessor restored;
         restored.setPlayConfigDetails (0, 2, sampleRate, blockSize);
         restored.prepareToPlay (sampleRate, blockSize);
         restored.setStateInformation (saved.getData(), (int) saved.getSize());
 
-        const auto restoredCutoff = restored.apvts.getRawParameterValue (afronova::param::synthCutoff)->load();
+        const auto restoredCutoff = restored.apvts.getRawParameterValue (halloweth::param::synthCutoff)->load();
 
         check (std::abs (restoredCutoff - 2500.0f) < 1.0f, "parameters restored from saved state");
         check (restored.getCurrentPresetIndex() == 3, "preset index restored by name");
@@ -297,7 +297,7 @@ int main()
 
     // ---------------------------------------------------------------- buffer sizes
     processor.prepareToPlay (48000.0, 128);
-    setParamReal (afronova::param::attack, 0.0f);
+    setParamReal (halloweth::param::attack, 0.0f);
 
     juce::AudioBuffer<float> smallBuffer (2, 128);
     midi.addEvent (juce::MidiMessage::noteOn (1, 48, (juce::uint8) 90), 0);
@@ -317,11 +317,11 @@ int main()
 
     // ---------------------------------------------------------------- sample map model
     {
-        afronova::SampleMap map;
+        halloweth::SampleMap map;
         map.name = "Test Map";
         map.category = "Piano";
 
-        afronova::SampleZone zone;
+        halloweth::SampleZone zone;
         zone.file = "samples/a.wav";
         zone.keyLow = 36;
         zone.keyHigh = 60;
@@ -335,7 +335,7 @@ int main()
         map.zones.push_back (zone);
 
         juce::String error;
-        const auto parsed = afronova::SampleMap::fromJson (map.toJson(), error);
+        const auto parsed = halloweth::SampleMap::fromJson (map.toJson(), error);
 
         check (parsed.isValid(), "map JSON round-trips" + (error.isNotEmpty() ? " (" + error + ")" : juce::String()));
         check (parsed.name == "Test Map" && parsed.category == "Piano", "map metadata round-trips");
@@ -353,20 +353,20 @@ int main()
         }
 
         juce::String badError;
-        const auto invalid = afronova::SampleMap::fromJson ("{ \"name\": \"x\" }", badError);
+        const auto invalid = halloweth::SampleMap::fromJson ("{ \"name\": \"x\" }", badError);
         check (! invalid.isValid() && badError.isNotEmpty(), "map without zones is rejected");
     }
 
     // ---------------------------------------------------------------- zone selection
     {
-        auto instrument = std::make_shared<afronova::LoadedInstrument>();
+        auto instrument = std::make_shared<halloweth::LoadedInstrument>();
         instrument->name = "Selection Test";
 
         auto addZone = [&instrument] (const juce::String& name, double frequency,
                                       int keyLow, int keyHigh, int rootNote,
                                       int velLow, int velHigh)
         {
-            afronova::LoadedZone zone;
+            halloweth::LoadedZone zone;
             zone.zone.file = name;
             zone.zone.keyLow = keyLow;
             zone.zone.keyHigh = keyHigh;
@@ -395,8 +395,8 @@ int main()
         check (instrument->getNumPlayableZones() == 3, "playable zone count reported");
 
         // Key ranges win over velocity when nothing matches both.
-        auto keyed = std::make_shared<afronova::LoadedInstrument>();
-        afronova::LoadedZone low;
+        auto keyed = std::make_shared<halloweth::LoadedInstrument>();
+        halloweth::LoadedZone low;
         low.zone.file = "low.wav";
         low.zone.keyLow = 0;
         low.zone.keyHigh = 59;
@@ -404,7 +404,7 @@ int main()
         low.data = makeSine (200.0, 44100.0, 1.0, "low", 40);
         keyed->zones.push_back (low);
 
-        afronova::LoadedZone high;
+        halloweth::LoadedZone high;
         high.zone.file = "high.wav";
         high.zone.keyLow = 60;
         high.zone.keyHigh = 127;
@@ -421,10 +421,10 @@ int main()
 
     // ---------------------------------------------------------------- multisample playback
     {
-        auto instrument = std::make_shared<afronova::LoadedInstrument>();
+        auto instrument = std::make_shared<halloweth::LoadedInstrument>();
         instrument->name = "Two Zone";
 
-        afronova::LoadedZone low;
+        halloweth::LoadedZone low;
         low.zone.file = "low.wav";
         low.zone.keyLow = 0;
         low.zone.keyHigh = 59;
@@ -432,7 +432,7 @@ int main()
         low.data = makeSine (220.0, 44100.0, 2.0, "low", 48);
         instrument->zones.push_back (low);
 
-        afronova::LoadedZone high;
+        halloweth::LoadedZone high;
         high.zone.file = "high.wav";
         high.zone.keyLow = 60;
         high.zone.keyHigh = 127;
@@ -441,7 +441,7 @@ int main()
         instrument->zones.push_back (high);
 
         processor.audioEngine.setInstrument (instrument);
-        setChoice (afronova::param::engineMode, 0);   // sample map
+        setChoice (halloweth::param::engineMode, 0);   // sample map
         processor.prepareToPlay (sampleRate, blockSize);
 
         renderBlock (processor, buffer, midi);
@@ -463,12 +463,12 @@ int main()
     // ---------------------------------------------------------------- one-shot vs loop
     {
         auto sample = makeSine (440.0, sampleRate, 1.0, "One Shot", 69);
-        auto instrument = afronova::InstrumentLoader::fromSingleSample (sample, 69);
+        auto instrument = halloweth::InstrumentLoader::fromSingleSample (sample, 69);
         processor.audioEngine.setInstrument (instrument);
-        setChoice (afronova::param::engineMode, 0);
+        setChoice (halloweth::param::engineMode, 0);
         processor.prepareToPlay (sampleRate, blockSize);
 
-        setParamReal (afronova::param::loopEnabled, 0.0f);
+        setParamReal (halloweth::param::loopEnabled, 0.0f);
         midi.addEvent (juce::MidiMessage::noteOn (1, 69, (juce::uint8) 100), 0);
 
         for (int b = 0; b < 140; ++b)
@@ -479,7 +479,7 @@ int main()
         midi.addEvent (juce::MidiMessage::allNotesOff (1), 0);
         renderBlock (processor, buffer, midi);
 
-        setParamReal (afronova::param::loopEnabled, 1.0f);
+        setParamReal (halloweth::param::loopEnabled, 1.0f);
         midi.addEvent (juce::MidiMessage::noteOn (1, 69, (juce::uint8) 100), 0);
 
         auto loopedPeak = 0.0f;
@@ -494,13 +494,13 @@ int main()
 
         midi.addEvent (juce::MidiMessage::allNotesOff (1), 0);
         renderBlock (processor, buffer, midi);
-        setParamReal (afronova::param::loopEnabled, 0.0f);
+        setParamReal (halloweth::param::loopEnabled, 0.0f);
     }
 
     // ---------------------------------------------------------------- map files on disk
     {
         auto folder = juce::File::getSpecialLocation (juce::File::tempDirectory)
-                          .getChildFile ("afronova_phase3_tests");
+                          .getChildFile ("halloweth_phase3_tests");
         folder.deleteRecursively();
         folder.createDirectory();
 
@@ -519,7 +519,7 @@ int main()
         mapFile.replaceWithText (mapJson);
 
         juce::String error;
-        const auto loaded = afronova::InstrumentLoader::loadMapFile (mapFile, error);
+        const auto loaded = halloweth::InstrumentLoader::loadMapFile (mapFile, error);
 
         check (loaded != nullptr, "map file loads" + (error.isNotEmpty() ? " (" + error + ")" : juce::String()));
 
@@ -545,7 +545,7 @@ int main()
         check (processor.audioEngine.getActiveInstrument() != nullptr, "engine received the map instrument");
         check (processor.getSampleErrorText().isNotEmpty(), "missing zone surfaces in the status text");
 
-        const auto mode = processor.apvts.getRawParameterValue (afronova::param::engineMode)->load();
+        const auto mode = processor.apvts.getRawParameterValue (halloweth::param::engineMode)->load();
         check (mode < 0.5f, "loading a map switches the engine to sample mode");
 
         // A map with no readable zones must fail cleanly.
@@ -553,7 +553,7 @@ int main()
         brokenMap.replaceWithText ("{ \"name\": \"Broken\", \"zones\": [ { \"file\": \"nope.wav\" } ] }");
 
         juce::String brokenError;
-        const auto broken = afronova::InstrumentLoader::loadMapFile (brokenMap, brokenError);
+        const auto broken = halloweth::InstrumentLoader::loadMapFile (brokenMap, brokenError);
         check (broken == nullptr && brokenError.isNotEmpty(), "map with no readable zones fails cleanly");
 
         folder.deleteRecursively();
@@ -589,7 +589,7 @@ int main()
         check (processor.getSfzFilePath() == sfzFile.getFullPathName(), "SFZ loads asynchronously");
         check (processor.getSfzNumRegions() == 1, "SFZ region is parsed by sfizz");
 
-        setChoice (afronova::param::engineMode, 3);
+        setChoice (halloweth::param::engineMode, 3);
         midi.addEvent (juce::MidiMessage::noteOn (1, 69, (juce::uint8) 100), 0);
         renderBlock (processor, buffer, midi);
         check (buffer.getMagnitude (0, 0, blockSize) > 0.001f,
@@ -601,7 +601,7 @@ int main()
         processor.getStateInformation (savedState);
 
         {
-            afronova::AfronovaAudioProcessor restored;
+            halloweth::HallowethAudioProcessor restored;
             restored.setPlayConfigDetails (0, 2, sampleRate, blockSize);
             restored.prepareToPlay (sampleRate, blockSize);
             restored.setStateInformation (savedState.getData(), (int) savedState.getSize());
@@ -619,7 +619,7 @@ int main()
                  juce::MemoryBlock clearedState;
                  restored.getStateInformation (clearedState);
 
-                 afronova::AfronovaAudioProcessor cleared;
+                 halloweth::HallowethAudioProcessor cleared;
                  cleared.setPlayConfigDetails (0, 2, sampleRate, blockSize);
                  cleared.prepareToPlay (sampleRate, blockSize);
                  cleared.setStateInformation (clearedState.getData(), (int) clearedState.getSize());
@@ -633,14 +633,14 @@ int main()
     // ---------------------------------------------------------------- drum engine
     {
         auto folder = juce::File::getSpecialLocation (juce::File::tempDirectory)
-                          .getChildFile ("afronova_drum_tests");
+                          .getChildFile ("halloweth_drum_tests");
         folder.deleteRecursively();
         folder.createDirectory();
 
         const auto kickFile = folder.getChildFile ("kick.wav");
         check (writeWav (kickFile, 200.0f, 48000.0, 2.0), "drum sample written");
 
-        afronova::DrumKit kit;
+        halloweth::DrumKit kit;
         kit.name = "Test Kit";
         kit.pads[0].file = kickFile.getFullPathName();
         kit.pads[0].name = "Kick";
@@ -648,7 +648,7 @@ int main()
         kit.pads[0].pan = 0.5f;
 
         juce::String kitError;
-        const auto parsedKit = afronova::DrumKit::fromJson (kit.toJson(), kitError);
+        const auto parsedKit = halloweth::DrumKit::fromJson (kit.toJson(), kitError);
 
         check (parsedKit.getNumLoadedPads() == 1, "kit JSON round-trips");
         check (parsedKit.name == "Test Kit", "kit name round-trips");
@@ -662,7 +662,7 @@ int main()
         check (drumMap.zones[0].oneShot, "drum zones are one-shot");
 
         juce::String kitLoadError;
-        auto drumInstrument = afronova::InstrumentLoader::loadDrumKit (kit, folder, kitLoadError);
+        auto drumInstrument = halloweth::InstrumentLoader::loadDrumKit (kit, folder, kitLoadError);
 
         check (drumInstrument != nullptr,
                "drum kit loads" + (kitLoadError.isNotEmpty() ? " (" + kitLoadError + ")" : juce::String()));
@@ -670,7 +670,7 @@ int main()
         if (drumInstrument != nullptr)
         {
             processor.audioEngine.setDrumInstrument (drumInstrument);
-            setChoice (afronova::param::engineMode, 2);   // drums
+            setChoice (halloweth::param::engineMode, 2);   // drums
             processor.prepareToPlay (sampleRate, blockSize);
             processor.setPadAdjustment (0, 0.0f, 0.0f, 0);
 
@@ -746,21 +746,21 @@ processor.setPadAdjustment (0, -48.0f, 0.0f, 0);
 
     // Every oscillator waveform must produce sound.
     {
-        setChoice (afronova::param::engineMode, 1);
-        setParamReal (afronova::param::synthCutoff, 8000.0f);
-        setParamReal (afronova::param::synthFilterEnv, 0.0f);
-        setParamReal (afronova::param::synthSpread, 0.0f);
-        setParamReal (afronova::param::synthDetune, 0.0f);
-        setParamReal (afronova::param::synthMix, 0.0f);
-        setParamReal (afronova::param::synthSub, 0.0f);
-        setParamReal (afronova::param::attack, 0.0f);
-        setParamReal (afronova::param::sustain, 100.0f);
+        setChoice (halloweth::param::engineMode, 1);
+        setParamReal (halloweth::param::synthCutoff, 8000.0f);
+        setParamReal (halloweth::param::synthFilterEnv, 0.0f);
+        setParamReal (halloweth::param::synthSpread, 0.0f);
+        setParamReal (halloweth::param::synthDetune, 0.0f);
+        setParamReal (halloweth::param::synthMix, 0.0f);
+        setParamReal (halloweth::param::synthSub, 0.0f);
+        setParamReal (halloweth::param::attack, 0.0f);
+        setParamReal (halloweth::param::sustain, 100.0f);
 
         const char* waveNames[] { "saw", "square", "sine", "triangle" };
 
         for (int wave = 0; wave < 4; ++wave)
         {
-            setChoice (afronova::param::synthWave, wave);
+            setChoice (halloweth::param::synthWave, wave);
             processor.prepareToPlay (sampleRate, blockSize);
 
             midi.addEvent (juce::MidiMessage::noteOn (1, 60, (juce::uint8) 100), 0);
@@ -779,7 +779,7 @@ processor.setPadAdjustment (0, -48.0f, 0.0f, 0);
 
     // ---------------------------------------------------------------- effects chain
     {
-        afronova::EffectChain chain;
+        halloweth::EffectChain chain;
         chain.prepare (sampleRate, blockSize);
 
         auto fillSine = [] (juce::AudioBuffer<float>& b, double frequency, float amplitude)
@@ -828,7 +828,7 @@ processor.setPadAdjustment (0, -48.0f, 0.0f, 0);
             fillSine (audio, 1000.0, 0.3f);
             juce::AudioBuffer<float> copy (audio);
 
-            afronova::EffectParameters bypassed;
+            halloweth::EffectParameters bypassed;
             chain.process (audio, bypassed);
 
             check (maxDifference (audio, copy) == 0.0f, "bypassed effect chain is transparent");
@@ -841,7 +841,7 @@ processor.setPadAdjustment (0, -48.0f, 0.0f, 0);
             fillSine (audio, 4000.0, 0.5f);
             const auto before = rms (audio);
 
-            afronova::EffectParameters p;
+            halloweth::EffectParameters p;
             p.filterOn = true;
             p.filterCutoff = 500.0f;
             p.filterResonance = 0.707f;
@@ -858,7 +858,7 @@ processor.setPadAdjustment (0, -48.0f, 0.0f, 0);
             fillSine (audio, 200.0, 0.5f);
             const auto before = rms (audio);
 
-            afronova::EffectParameters p;
+            halloweth::EffectParameters p;
             p.filterOn = true;
             p.filterCutoff = 4000.0f;
             p.filterResonance = 0.707f;
@@ -875,7 +875,7 @@ processor.setPadAdjustment (0, -48.0f, 0.0f, 0);
             fillSine (audio, 1000.0, 0.2f);
             const auto before = rms (audio);
 
-            afronova::EffectParameters p;
+            halloweth::EffectParameters p;
             p.driveOn = true;
             p.driveAmount = 8.0f;
             p.driveTone = 1.0f;
@@ -888,7 +888,7 @@ processor.setPadAdjustment (0, -48.0f, 0.0f, 0);
         {
             chain.reset();
 
-            afronova::EffectParameters p;
+            halloweth::EffectParameters p;
             p.delayOn = true;
             p.delayTimeMs = 60.0f;
             p.delayFeedback = 0.6f;
@@ -914,7 +914,7 @@ processor.setPadAdjustment (0, -48.0f, 0.0f, 0);
         {
             chain.reset();
 
-            afronova::EffectParameters p;
+            halloweth::EffectParameters p;
             p.reverbOn = true;
             p.reverbMix = 1.0f;
             p.reverbSize = 1.0f;
@@ -945,7 +945,7 @@ processor.setPadAdjustment (0, -48.0f, 0.0f, 0);
             fillSine (audio, 1000.0, 0.8f);
             const auto before = audio.getMagnitude (0, 0, blockSize);
 
-            afronova::EffectParameters p;
+            halloweth::EffectParameters p;
             p.compOn = true;
             p.compThresholdDb = -30.0f;
             p.compRatio = 10.0f;
@@ -965,7 +965,7 @@ processor.setPadAdjustment (0, -48.0f, 0.0f, 0);
             audio.getWritePointer (0)[0] = 0.5f;
             audio.getWritePointer (1)[0] = -0.5f;
 
-            afronova::EffectParameters p;
+            halloweth::EffectParameters p;
             p.widthOn = true;
             p.widthAmount = 0.0f;
 
@@ -981,7 +981,7 @@ processor.setPadAdjustment (0, -48.0f, 0.0f, 0);
             audio.getWritePointer (0)[0] = 0.5f;
             audio.getWritePointer (1)[0] = -0.5f;
 
-            afronova::EffectParameters p;
+            halloweth::EffectParameters p;
             p.widthOn = true;
             p.widthAmount = 2.0f;
 
@@ -993,22 +993,22 @@ processor.setPadAdjustment (0, -48.0f, 0.0f, 0);
 
     // ---------------------------------------------------------------- synth sound design
     {
-        setChoice (afronova::param::engineMode, 1);   // synth
+        setChoice (halloweth::param::engineMode, 1);   // synth
         processor.prepareToPlay (sampleRate, blockSize);
 
-        setParamReal (afronova::param::attack, 0.0f);
-        setParamReal (afronova::param::decay, 120.0f);
-        setParamReal (afronova::param::sustain, 100.0f);
-        setChoice (afronova::param::synthWave, 0);    // saw
-        setParamReal (afronova::param::synthDetune, 0.0f);
-        setParamReal (afronova::param::synthMix, 0.0f);
-        setParamReal (afronova::param::synthSpread, 0.0f);
-        setParamReal (afronova::param::synthLfoDepth, 0.0f);
-        setParamReal (afronova::param::synthSub, 0.0f);
+        setParamReal (halloweth::param::attack, 0.0f);
+        setParamReal (halloweth::param::decay, 120.0f);
+        setParamReal (halloweth::param::sustain, 100.0f);
+        setChoice (halloweth::param::synthWave, 0);    // saw
+        setParamReal (halloweth::param::synthDetune, 0.0f);
+        setParamReal (halloweth::param::synthMix, 0.0f);
+        setParamReal (halloweth::param::synthSpread, 0.0f);
+        setParamReal (halloweth::param::synthLfoDepth, 0.0f);
+        setParamReal (halloweth::param::synthSub, 0.0f);
 
         // Filter envelope: the attack must be measurably brighter than the sustain.
-        setParamReal (afronova::param::synthCutoff, 300.0f);
-        setParamReal (afronova::param::synthFilterEnv, 100.0f);
+        setParamReal (halloweth::param::synthCutoff, 300.0f);
+        setParamReal (halloweth::param::synthFilterEnv, 100.0f);
 
         midi.addEvent (juce::MidiMessage::noteOn (1, 57, (juce::uint8) 100), 0);
         renderBlock (processor, buffer, midi);
@@ -1028,9 +1028,9 @@ processor.setPadAdjustment (0, -48.0f, 0.0f, 0);
         renderBlock (processor, buffer, midi);
 
         // Sub oscillator adds energy an octave below the note.
-        setParamReal (afronova::param::synthCutoff, 12000.0f);
-        setParamReal (afronova::param::synthFilterEnv, 0.0f);
-        setParamReal (afronova::param::synthSub, 0.0f);
+        setParamReal (halloweth::param::synthCutoff, 12000.0f);
+        setParamReal (halloweth::param::synthFilterEnv, 0.0f);
+        setParamReal (halloweth::param::synthSub, 0.0f);
         processor.prepareToPlay (sampleRate, blockSize);
 
         midi.addEvent (juce::MidiMessage::noteOn (1, 57, (juce::uint8) 100), 0);
@@ -1040,7 +1040,7 @@ processor.setPadAdjustment (0, -48.0f, 0.0f, 0);
         midi.addEvent (juce::MidiMessage::allNotesOff (1), 0);
         renderBlock (processor, buffer, midi);
 
-        setParamReal (afronova::param::synthSub, 100.0f);
+        setParamReal (halloweth::param::synthSub, 100.0f);
         midi.addEvent (juce::MidiMessage::noteOn (1, 57, (juce::uint8) 100), 0);
         renderBlock (processor, buffer, midi);
         const auto withSub = magnitudeAt (buffer.getReadPointer (0), blockSize, 110.0, sampleRate);
@@ -1051,10 +1051,10 @@ processor.setPadAdjustment (0, -48.0f, 0.0f, 0);
 
         midi.addEvent (juce::MidiMessage::allNotesOff (1), 0);
         renderBlock (processor, buffer, midi);
-        setParamReal (afronova::param::synthSub, 0.0f);
+        setParamReal (halloweth::param::synthSub, 0.0f);
 
         // Stereo spread: at 0% the channels are identical, at 100% they differ.
-        setParamReal (afronova::param::synthSpread, 0.0f);
+        setParamReal (halloweth::param::synthSpread, 0.0f);
         processor.prepareToPlay (sampleRate, blockSize);
         midi.addEvent (juce::MidiMessage::noteOn (1, 60, (juce::uint8) 100), 0);
         renderBlock (processor, buffer, midi);
@@ -1071,9 +1071,9 @@ processor.setPadAdjustment (0, -48.0f, 0.0f, 0);
         midi.addEvent (juce::MidiMessage::allNotesOff (1), 0);
         renderBlock (processor, buffer, midi);
 
-        setParamReal (afronova::param::synthMix, 100.0f);
-        setParamReal (afronova::param::synthDetune, 20.0f);
-        setParamReal (afronova::param::synthSpread, 100.0f);
+        setParamReal (halloweth::param::synthMix, 100.0f);
+        setParamReal (halloweth::param::synthDetune, 20.0f);
+        setParamReal (halloweth::param::synthSpread, 100.0f);
         processor.prepareToPlay (sampleRate, blockSize);
         midi.addEvent (juce::MidiMessage::noteOn (1, 60, (juce::uint8) 100), 0);
         renderBlock (processor, buffer, midi);

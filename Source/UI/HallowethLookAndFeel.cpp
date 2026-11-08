@@ -1,9 +1,9 @@
-#include "AfronovaLookAndFeel.h"
+#include "HallowethLookAndFeel.h"
 #include "Theme.h"
 
-namespace afronova
+namespace halloweth
 {
-AfronovaLookAndFeel::AfronovaLookAndFeel()
+HallowethLookAndFeel::HallowethLookAndFeel()
 {
     setColour (juce::Slider::rotarySliderFillColourId, theme::accent);
     setColour (juce::Slider::rotarySliderOutlineColourId, theme::outline);
@@ -29,7 +29,7 @@ AfronovaLookAndFeel::AfronovaLookAndFeel()
     setColour (juce::ComboBox::arrowColourId, theme::textDim);
 }
 
-void AfronovaLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int width, int height,
+void HallowethLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int width, int height,
                                             float sliderPosProportional, float rotaryStartAngle,
                                             float rotaryEndAngle, juce::Slider& slider)
 {
@@ -83,7 +83,7 @@ void AfronovaLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int
     g.fillPath (pointer);
 }
 
-void AfronovaLookAndFeel::drawButtonBackground (juce::Graphics& g, juce::Button& button,
+void HallowethLookAndFeel::drawButtonBackground (juce::Graphics& g, juce::Button& button,
                                                 const juce::Colour& backgroundColour,
                                                 bool shouldDrawButtonAsHighlighted,
                                                 bool shouldDrawButtonAsDown)
@@ -141,7 +141,7 @@ void AfronovaLookAndFeel::drawButtonBackground (juce::Graphics& g, juce::Button&
     }
 }
 
-void AfronovaLookAndFeel::drawButtonText (juce::Graphics& g, juce::TextButton& button,
+void HallowethLookAndFeel::drawButtonText (juce::Graphics& g, juce::TextButton& button,
                                           bool, bool)
 {
     const auto textColour = button.getToggleState()
@@ -163,12 +163,12 @@ void AfronovaLookAndFeel::drawButtonText (juce::Graphics& g, juce::TextButton& b
     g.drawFittedText (button.getButtonText(), textArea, justification, 1, 0.9f);
 }
 
-juce::Font AfronovaLookAndFeel::getTextButtonFont (juce::TextButton&, int buttonHeight)
+juce::Font HallowethLookAndFeel::getTextButtonFont (juce::TextButton&, int buttonHeight)
 {
     return theme::boldFont (juce::jlimit (11.0f, 14.0f, buttonHeight * 0.42f));
 }
 
-juce::Font AfronovaLookAndFeel::getLabelFont (juce::Label& label)
+juce::Font HallowethLookAndFeel::getLabelFont (juce::Label& label)
 {
     return label.getFont();
 }

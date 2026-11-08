@@ -2,7 +2,7 @@
 
 #include <juce_gui_basics/juce_gui_basics.h>
 
-namespace afronova
+namespace halloweth
 {
 /** Honest placeholder for a section that has not been built yet.
 

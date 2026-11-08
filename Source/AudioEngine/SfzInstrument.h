@@ -7,7 +7,7 @@
 #include <memory>
 #include <vector>
 
-namespace afronova
+namespace halloweth
 {
 /** One fully loaded SFZ instance. Create and destroy it away from the audio thread. */
 class SfzInstrument

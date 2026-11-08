@@ -1,6 +1,6 @@
 #include "SampleMap.h"
 
-namespace afronova
+namespace halloweth
 {
 namespace
 {

@@ -4,7 +4,7 @@
 
 #include <functional>
 
-namespace afronova
+namespace halloweth
 {
 /** Left-hand navigation rail. Switching pages is real: the editor swaps the
     visible content page in response. */

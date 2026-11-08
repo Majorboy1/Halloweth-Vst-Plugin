@@ -4,7 +4,7 @@
 
 #include "Instruments/InstrumentLoader.h"
 
-namespace afronova
+namespace halloweth
 {
 class AudioEngine;
 

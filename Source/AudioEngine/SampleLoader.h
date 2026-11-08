@@ -6,7 +6,7 @@
 
 #include "SampleData.h"
 
-namespace afronova
+namespace halloweth
 {
 /** Loads audio files into immutable SampleData objects.
 

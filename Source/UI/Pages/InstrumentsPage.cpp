@@ -4,9 +4,9 @@
 #include "../Knobs/LabeledKnob.h"
 #include "../Theme.h"
 
-namespace afronova
+namespace halloweth
 {
-InstrumentsPage::InstrumentsPage (AfronovaAudioProcessor& p) : processor (p)
+InstrumentsPage::InstrumentsPage (HallowethAudioProcessor& p) : processor (p)
 {
     // ---- engine selector -----------------------------------------------------
     engineSampleButton.setButtonText ("SAMPLE MAP");
@@ -146,7 +146,7 @@ void InstrumentsPage::chooseSampleFile()
 void InstrumentsPage::chooseMapFile()
 {
     fileChooser = std::make_unique<juce::FileChooser> (
-        "Load an AFRONOVA multisample map (.json)",
+        "Load an HALLOWETH multisample map (.json)",
         juce::File::getSpecialLocation (juce::File::userMusicDirectory),
         "*.json");
 

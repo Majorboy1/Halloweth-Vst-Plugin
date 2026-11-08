@@ -2,13 +2,13 @@
 
 #include <juce_gui_basics/juce_gui_basics.h>
 
-namespace afronova
+namespace halloweth
 {
-/** Custom drawing for AFRONOVA's knobs, buttons and labels. */
-class AfronovaLookAndFeel : public juce::LookAndFeel_V4
+/** Custom drawing for HALLOWETH's knobs, buttons and labels. */
+class HallowethLookAndFeel : public juce::LookAndFeel_V4
 {
 public:
-    AfronovaLookAndFeel();
+    HallowethLookAndFeel();
 
     void drawRotarySlider (juce::Graphics&, int x, int y, int width, int height,
                            float sliderPosProportional, float rotaryStartAngle,
@@ -26,6 +26,6 @@ public:
     juce::Font getLabelFont (juce::Label&) override;
 
 private:
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AfronovaLookAndFeel)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HallowethLookAndFeel)
 };
 }

@@ -3,9 +3,9 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_gui_basics/juce_gui_basics.h>
 
-namespace afronova
+namespace halloweth
 {
-class AfronovaAudioProcessor;
+class HallowethAudioProcessor;
 class LabeledKnob;
 
 /** Instruments page for the sample-map, SFZ and synth engines.
@@ -14,7 +14,7 @@ class LabeledKnob;
 class InstrumentsPage : public juce::Component
 {
 public:
-    explicit InstrumentsPage (AfronovaAudioProcessor&);
+    explicit InstrumentsPage (HallowethAudioProcessor&);
     ~InstrumentsPage() override;
 
     void paint (juce::Graphics&) override;
@@ -30,7 +30,7 @@ private:
     void refresh();
     void setEngineMode (int mode);
 
-    AfronovaAudioProcessor& processor;
+    HallowethAudioProcessor& processor;
 
     juce::OwnedArray<LabeledKnob> envelopeKnobs;
     juce::OwnedArray<LabeledKnob> synthKnobs;

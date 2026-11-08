@@ -1,4 +1,4 @@
-# Installs Halloweth with the plugin data on D: while FL Studio still finds it.
+# Installs HALLOWETH with the plugin data on D: while FL Studio still finds it.
 #
 # How it works:
 #   - The real bundle lives at  D:\VST3\HALLOWETH.vst3
@@ -37,7 +37,7 @@ if ($flStudio) {
 
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $source = Join-Path $projectRoot ("build-" + $Config.ToLowerInvariant() +
-                                  "\AFRONOVA_artefacts\$Config\VST3\HALLOWETH.vst3")
+                                  "\HALLOWETH_artefacts\$Config\VST3\HALLOWETH.vst3")
 
 if (-not (Test-Path $source)) {
     Write-Host "VST3 bundle not found:" -ForegroundColor Red
@@ -103,4 +103,4 @@ Write-Host ""
 Write-Host "FL Studio:" -ForegroundColor Cyan
 Write-Host "  1. Start FL Studio"
 Write-Host "  2. Options > Manage plugins > Find installed plugins"
-Write-Host "  3. Halloweth appears in the plugin list; future updates replace files on D:"
+Write-Host "  3. HALLOWETH stays available; updates only replace files on D:"

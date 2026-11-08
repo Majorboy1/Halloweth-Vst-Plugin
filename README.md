@@ -37,7 +37,7 @@ Cinematic hybrid synth and premium world-instrument platform — VST3 for Window
 | Preset browser, vocal chops, remaining effects (phaser, flanger, EQ, transient) | **not implemented** |
 
 See [Architecture](docs/architecture.md) for the current engine boundaries, the Salamander
-Piano evaluation, licensing notes and the proposed SFZ integration path.
+Piano evaluation, licensing notes and the SFZ integration details.
 
 Nothing in the interface is decorative: every control is connected to a real parameter,
 and sections that are not built show an explicit "not implemented yet" page instead of
@@ -56,8 +56,8 @@ This machine is currently set up with:
 | Tool | Location |
 |---|---|
 | VS 2022 Build Tools | `D:\devtools\vs2022bt` |
-| CMake 3.31.8 | `D:\devtools\afronova\cmake\bin\cmake.exe` |
-| Ninja 1.13.1 | `D:\devtools\afronova\ninja\ninja.exe` |
+| CMake 3.31.8 | `D:\devtools\halloweth\cmake\bin\cmake.exe` |
+| Ninja 1.13.1 | `D:\devtools\halloweth\ninja\ninja.exe` |
 | JUCE 8.0.8 | CMake FetchContent cache at `build-release\_deps\juce-src` |
 | sfizz | `ThirdParty\sfizz` submodule, pinned at `3993b5c` |
 
@@ -72,8 +72,8 @@ This machine is currently set up with:
 Output:
 
 ```
-build-release\AFRONOVA_artefacts\Release\VST3\HALLOWETH.vst3
-build-release\AFRONOVA_artefacts\Release\Standalone\HALLOWETH.exe
+build-release\HALLOWETH_artefacts\Release\VST3\HALLOWETH.vst3
+build-release\HALLOWETH_artefacts\Release\Standalone\HALLOWETH.exe
 ```
 
 Manual equivalent:
@@ -88,7 +88,7 @@ The standalone app is the fastest way to check the plugin without a DAW.
 ### Tests
 
 ```powershell
-.\build-release\AFRONOVA_Tests_artefacts\Release\AFRONOVA_Tests.exe
+.\build-release\HALLOWETH_Tests_artefacts\Release\HALLOWETH_Tests.exe
 # or
 cd build-release; ctest -C Release --output-on-failure
 ```
@@ -129,7 +129,7 @@ the installer to update.
 
 VST2 (`.dll`) was discontinued by Steinberg in 2018 and its SDK is no longer distributable,
 so JUCE 8 cannot build VST2 plugins. FL Studio 2024/2025/2026 supports VST3 natively —
-the `.vst3` **bundle** (a folder containing `Contents\x86_64-win\AFRONOVA.vst3`) is the
+the `.vst3` **bundle** (a folder containing `Contents\x86_64-win\HALLOWETH.vst3`) is the
 correct and current format.
 
 The plugin is linked against the **static** MSVC runtime, so it has no dependency on the
@@ -162,7 +162,7 @@ Source/
     FactoryPresets.{h,cpp}  The 50 factory preset definitions
   UI/
     Theme.h                 Colours, fonts, card drawing
-    AfronovaLookAndFeel     Custom knobs and buttons
+    HallowethLookAndFeel     Custom knobs and buttons
     NavigationBar           Left navigation rail
     PresetBar               Preset strip + MIDI lamp
     MidiActivityLight
@@ -184,7 +184,7 @@ ThirdParty/JUCE/            JUCE 8.0.8 (not redistributed with binaries)
 ## 6. Presets
 
 Factory presets live in code; user presets are JSON files in
-`%APPDATA%\Afronova\Presets`. Favourites are stored in the same folder.
+`%APPDATA%\Halloweth\Presets`. Favourites are stored in the same folder.
 
 - The preset strip at the top always shows the current preset and steps through the
   whole bank; the star toggles a favourite.

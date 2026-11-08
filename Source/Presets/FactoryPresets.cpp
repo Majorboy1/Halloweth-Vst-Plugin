@@ -1,6 +1,6 @@
 #include "FactoryPresets.h"
 
-namespace afronova
+namespace halloweth
 {
 namespace
 {

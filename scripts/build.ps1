@@ -1,4 +1,4 @@
-# Builds the AFRONOVA VST3 plugin and standalone app with MSVC.
+# Builds the HALLOWETH VST3 plugin and standalone app with MSVC.
 #
 # Usage:
 #   .\scripts\build.ps1                 # Release build
@@ -46,7 +46,7 @@ if ($LASTEXITCODE -ne 0) { throw "Could not initialize sfizz build dependencies.
 
 function Resolve-CMake {
     $candidates = @(
-        "D:\devtools\afronova\cmake\bin\cmake.exe",
+        "D:\devtools\halloweth\cmake\bin\cmake.exe",
         "C:\Program Files\CMake\bin\cmake.exe"
     )
 
@@ -57,7 +57,7 @@ function Resolve-CMake {
     $command = Get-Command cmake -ErrorAction SilentlyContinue
     if ($command) { return $command.Source }
 
-    throw "CMake not found. Install CMake 3.22+ or place it in D:\devtools\afronova\cmake."
+    throw "CMake not found. Install CMake 3.22+ or place it in D:\devtools\halloweth\cmake."
 }
 
 if ($Clean -and (Test-Path $buildDir)) {
@@ -75,7 +75,7 @@ if ($LASTEXITCODE -ne 0) { throw "CMake configure failed." }
 & $cmake --build $buildDir --config $Config --parallel
 if ($LASTEXITCODE -ne 0) { throw "Build failed." }
 
-$artefacts = Join-Path $buildDir "AFRONOVA_artefacts\$Config"
+$artefacts = Join-Path $buildDir "HALLOWETH_artefacts\$Config"
 Write-Host ""
 Write-Host "Build succeeded." -ForegroundColor Green
 Write-Host "  VST3:       $artefacts\VST3\HALLOWETH.vst3"

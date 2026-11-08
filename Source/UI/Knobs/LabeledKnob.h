@@ -2,7 +2,7 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 
-namespace afronova
+namespace halloweth
 {
 /** A rotary control with a caption, attached to an APVTS parameter. */
 class LabeledKnob : public juce::Component

@@ -1,5 +1,5 @@
 @echo off
-REM Installs AFRONOVA into the shared VST3 folder that FL Studio scans.
+REM Installs HALLOWETH into the shared VST3 folder that FL Studio scans.
 REM Just double-click this file and click "Yes" on the Windows administrator prompt.
 
 setlocal

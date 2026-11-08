@@ -4,7 +4,7 @@
 
 #include <vector>
 
-namespace afronova
+namespace halloweth
 {
 /** One mapped region of a multisampled instrument.
 

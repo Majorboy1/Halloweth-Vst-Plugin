@@ -8,7 +8,7 @@
  #include <windows.h>
 #endif
 
-namespace afronova
+namespace halloweth
 {
 namespace
 {
@@ -79,9 +79,9 @@ namespace
     }
 }
 
-AfronovaAudioProcessor::AfronovaAudioProcessor()
+HallowethAudioProcessor::HallowethAudioProcessor()
     : AudioProcessor (BusesProperties().withOutput ("Output", juce::AudioChannelSet::stereo(), true)),
-      apvts (*this, nullptr, "AFRONOVA_STATE", createParameterLayout())
+      apvts (*this, nullptr, "HALLOWETH_STATE", createParameterLayout())
 {
     sfzEngine = std::make_unique<SfzEngine>();
 
@@ -111,13 +111,13 @@ AfronovaAudioProcessor::AfronovaAudioProcessor()
     startTimer (100);
 }
 
-AfronovaAudioProcessor::~AfronovaAudioProcessor()
+HallowethAudioProcessor::~HallowethAudioProcessor()
 {
     stopTimer();
 }
 
 //==============================================================================
-juce::AudioProcessorValueTreeState::ParameterLayout AfronovaAudioProcessor::createParameterLayout()
+juce::AudioProcessorValueTreeState::ParameterLayout HallowethAudioProcessor::createParameterLayout()
 {
     using namespace juce;
 
@@ -231,7 +231,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout AfronovaAudioProcessor::crea
 }
 
 //==============================================================================
-void AfronovaAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
+void HallowethAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     audioEngine.prepare (sampleRate, samplesPerBlock);
     sfzEngine->prepare (sampleRate, samplesPerBlock);
@@ -252,7 +252,7 @@ void AfronovaAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlo
     activeVoices.store (0, std::memory_order_relaxed);
 }
 
-void AfronovaAudioProcessor::releaseResources()
+void HallowethAudioProcessor::releaseResources()
 {
     audioEngine.reset();
     sfzEngine->allSoundsOff();
@@ -260,7 +260,7 @@ void AfronovaAudioProcessor::releaseResources()
     activeVoices.store (0, std::memory_order_relaxed);
 }
 
-bool AfronovaAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+bool HallowethAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
     const auto& mainOutput = layouts.getMainOutputChannelSet();
 
@@ -272,7 +272,7 @@ bool AfronovaAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts)
            || layouts.getMainInputChannelSet() == mainOutput;
 }
 
-void AfronovaAudioProcessor::updateToneFilter()
+void HallowethAudioProcessor::updateToneFilter()
 {
     if (toneParam == nullptr || getSampleRate() <= 0.0)
         return;
@@ -286,7 +286,7 @@ void AfronovaAudioProcessor::updateToneFilter()
     currentToneHz = cutoff;
 }
 
-void AfronovaAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
+void HallowethAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
 
@@ -404,13 +404,13 @@ void AfronovaAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
 }
 
 //==============================================================================
-juce::AudioProcessorEditor* AfronovaAudioProcessor::createEditor()
+juce::AudioProcessorEditor* HallowethAudioProcessor::createEditor()
 {
-    return new AfronovaAudioProcessorEditor (*this);
+    return new HallowethAudioProcessorEditor (*this);
 }
 
 //==============================================================================
-int AfronovaAudioProcessor::findPresetByName (const juce::String& name) const noexcept
+int HallowethAudioProcessor::findPresetByName (const juce::String& name) const noexcept
 {
     for (int i = 0; i < presetManager.getNumPresets(); ++i)
         if (presetManager.getPreset (i).name == name)
@@ -419,12 +419,12 @@ int AfronovaAudioProcessor::findPresetByName (const juce::String& name) const no
     return -1;
 }
 
-int AfronovaAudioProcessor::getSfzNumRegions() const noexcept
+int HallowethAudioProcessor::getSfzNumRegions() const noexcept
 {
     return sfzEngine != nullptr ? sfzEngine->getNumRegions() : 0;
 }
 
-void AfronovaAudioProcessor::loadInstrumentForPreset (const PresetLoadResult& result)
+void HallowethAudioProcessor::loadInstrumentForPreset (const PresetLoadResult& result)
 {
     if (result.instrumentPath.isEmpty())
         return;
@@ -454,7 +454,7 @@ void AfronovaAudioProcessor::loadInstrumentForPreset (const PresetLoadResult& re
         loadSampleFileAsync (file);
 }
 
-void AfronovaAudioProcessor::applyPreset (int index)
+void HallowethAudioProcessor::applyPreset (int index)
 {
     if (! juce::isPositiveAndBelow (index, presetManager.getNumPresets()))
         return;
@@ -464,7 +464,7 @@ void AfronovaAudioProcessor::applyPreset (int index)
     currentPreset.store (index, std::memory_order_relaxed);
 }
 
-void AfronovaAudioProcessor::selectNextPreset (int delta)
+void HallowethAudioProcessor::selectNextPreset (int delta)
 {
     const auto count = presetManager.getNumPresets();
 
@@ -475,7 +475,7 @@ void AfronovaAudioProcessor::selectNextPreset (int delta)
     applyPreset (next);
 }
 
-bool AfronovaAudioProcessor::isPresetFavourite (int index) const
+bool HallowethAudioProcessor::isPresetFavourite (int index) const
 {
     if (! juce::isPositiveAndBelow (index, presetManager.getNumPresets()))
         return false;
@@ -483,7 +483,7 @@ bool AfronovaAudioProcessor::isPresetFavourite (int index) const
     return presetManager.isFavourite (presetManager.getPreset (index).name);
 }
 
-void AfronovaAudioProcessor::togglePresetFavourite (int index)
+void HallowethAudioProcessor::togglePresetFavourite (int index)
 {
     if (! juce::isPositiveAndBelow (index, presetManager.getNumPresets()))
         return;
@@ -491,7 +491,7 @@ void AfronovaAudioProcessor::togglePresetFavourite (int index)
     presetManager.toggleFavourite (presetManager.getPreset (index).name);
 }
 
-void AfronovaAudioProcessor::saveCurrentAsPreset (const juce::String& name,
+void HallowethAudioProcessor::saveCurrentAsPreset (const juce::String& name,
                                                   const juce::String& category,
                                                   const juce::String& genre,
                                                   const juce::String& description)
@@ -512,7 +512,7 @@ void AfronovaAudioProcessor::saveCurrentAsPreset (const juce::String& name,
     }
 }
 
-void AfronovaAudioProcessor::deletePreset (int index)
+void HallowethAudioProcessor::deletePreset (int index)
 {
     if (presetManager.deleteUserPreset (index))
     {
@@ -523,7 +523,7 @@ void AfronovaAudioProcessor::deletePreset (int index)
 }
 
 //==============================================================================
-void AfronovaAudioProcessor::startLoad (std::shared_ptr<InstrumentLoadJob> job)
+void HallowethAudioProcessor::startLoad (std::shared_ptr<InstrumentLoadJob> job)
 {
     pendingJob = job;
     sampleStatus = "Loading " + job->file.getFileName() + "...";
@@ -607,7 +607,7 @@ void AfronovaAudioProcessor::startLoad (std::shared_ptr<InstrumentLoadJob> job)
     });
 }
 
-void AfronovaAudioProcessor::loadSampleFileAsync (const juce::File& file)
+void HallowethAudioProcessor::loadSampleFileAsync (const juce::File& file)
 {
     auto job = std::make_shared<InstrumentLoadJob>();
     job->kind = InstrumentLoadJob::Kind::singleSample;
@@ -615,7 +615,7 @@ void AfronovaAudioProcessor::loadSampleFileAsync (const juce::File& file)
     startLoad (job);
 }
 
-void AfronovaAudioProcessor::loadSampleMapAsync (const juce::File& mapFile)
+void HallowethAudioProcessor::loadSampleMapAsync (const juce::File& mapFile)
 {
     auto job = std::make_shared<InstrumentLoadJob>();
     job->kind = InstrumentLoadJob::Kind::map;
@@ -623,7 +623,7 @@ void AfronovaAudioProcessor::loadSampleMapAsync (const juce::File& mapFile)
     startLoad (job);
 }
 
-void AfronovaAudioProcessor::loadSfzFileAsync (const juce::File& sfzFile)
+void HallowethAudioProcessor::loadSfzFileAsync (const juce::File& sfzFile)
 {
     auto job = std::make_shared<InstrumentLoadJob>();
     job->kind = InstrumentLoadJob::Kind::sfz;
@@ -633,7 +633,7 @@ void AfronovaAudioProcessor::loadSfzFileAsync (const juce::File& sfzFile)
     startLoad (job);
 }
 
-void AfronovaAudioProcessor::loadDrumKitAsync (const juce::File& kitFile)
+void HallowethAudioProcessor::loadDrumKitAsync (const juce::File& kitFile)
 {
     auto job = std::make_shared<InstrumentLoadJob>();
     job->kind = InstrumentLoadJob::Kind::drumKit;
@@ -642,7 +642,7 @@ void AfronovaAudioProcessor::loadDrumKitAsync (const juce::File& kitFile)
     startLoad (job);
 }
 
-void AfronovaAudioProcessor::loadDrumPadSampleAsync (int padIndex, const juce::File& sampleFile)
+void HallowethAudioProcessor::loadDrumPadSampleAsync (int padIndex, const juce::File& sampleFile)
 {
     if (! juce::isPositiveAndBelow (padIndex, DrumKit::numPads))
         return;
@@ -661,7 +661,7 @@ void AfronovaAudioProcessor::loadDrumPadSampleAsync (int padIndex, const juce::F
     startLoad (job);
 }
 
-void AfronovaAudioProcessor::clearDrumPad (int padIndex)
+void HallowethAudioProcessor::clearDrumPad (int padIndex)
 {
     if (! juce::isPositiveAndBelow (padIndex, DrumKit::numPads))
         return;
@@ -688,7 +688,7 @@ void AfronovaAudioProcessor::clearDrumPad (int padIndex)
     drumKitRevision.fetch_add (1, std::memory_order_relaxed);
 }
 
-bool AfronovaAudioProcessor::saveDrumKit (const juce::File& kitFile) const
+bool HallowethAudioProcessor::saveDrumKit (const juce::File& kitFile) const
 {
     if (drumKit.isEmpty())
         return false;
@@ -696,7 +696,7 @@ bool AfronovaAudioProcessor::saveDrumKit (const juce::File& kitFile) const
     return kitFile.replaceWithText (drumKit.toJson());
 }
 
-void AfronovaAudioProcessor::setPadAdjustment (int padIndex, float gainDb, float pan, int semitones)
+void HallowethAudioProcessor::setPadAdjustment (int padIndex, float gainDb, float pan, int semitones)
 {
     if (! juce::isPositiveAndBelow (padIndex, DrumKit::numPads))
         return;
@@ -710,7 +710,7 @@ void AfronovaAudioProcessor::setPadAdjustment (int padIndex, float gainDb, float
     drumKitRevision.fetch_add (1, std::memory_order_relaxed);
 }
 
-void AfronovaAudioProcessor::applyAllPadAdjustments()
+void HallowethAudioProcessor::applyAllPadAdjustments()
 {
     for (int i = 0; i < DrumKit::numPads; ++i)
     {
@@ -719,7 +719,7 @@ void AfronovaAudioProcessor::applyAllPadAdjustments()
     }
 }
 
-void AfronovaAudioProcessor::clearSample()
+void HallowethAudioProcessor::clearSample()
 {
     audioEngine.clearInstrument();
     sfzEngine->clear();
@@ -732,12 +732,12 @@ void AfronovaAudioProcessor::clearSample()
     sampleRevision.fetch_add (1, std::memory_order_relaxed);
 }
 
-void AfronovaAudioProcessor::timerCallback()
+void HallowethAudioProcessor::timerCallback()
 {
     pollSampleLoad();
 }
 
-void AfronovaAudioProcessor::publishDrumKit (const DrumKit& kit,
+void HallowethAudioProcessor::publishDrumKit (const DrumKit& kit,
                                              std::shared_ptr<const LoadedInstrument> instrument,
                                              const juce::String& error)
 {
@@ -764,7 +764,7 @@ void AfronovaAudioProcessor::publishDrumKit (const DrumKit& kit,
     drumKitRevision.fetch_add (1, std::memory_order_relaxed);
 }
 
-void AfronovaAudioProcessor::pollSampleLoad()
+void HallowethAudioProcessor::pollSampleLoad()
 {
     const auto job = pendingJob;
 
@@ -836,7 +836,7 @@ void AfronovaAudioProcessor::pollSampleLoad()
 }
 
 //==============================================================================
-void AfronovaAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
+void HallowethAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
     auto state = apvts.copyState();
 
@@ -867,7 +867,7 @@ void AfronovaAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
         copyXmlToBinary (*xml, destData);
 }
 
-void AfronovaAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
+void HallowethAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     const auto xml = getXmlFromBinary (data, sizeInBytes);
 
@@ -940,5 +940,5 @@ void AfronovaAudioProcessor::setStateInformation (const void* data, int sizeInBy
 //==============================================================================
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
-    return new afronova::AfronovaAudioProcessor();
+    return new halloweth::HallowethAudioProcessor();
 }

@@ -28,7 +28,7 @@
       "problemMatcher": ["$msCompile"]
     },
     {
-      "label": "AFRONOVA: Clean rebuild",
+      "label": "HALLOWETH: Clean rebuild",
       "type": "shell",
       "command": "powershell",
       "args": [

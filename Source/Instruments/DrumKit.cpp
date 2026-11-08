@@ -1,6 +1,6 @@
 #include "DrumKit.h"
 
-namespace afronova
+namespace halloweth
 {
 namespace
 {

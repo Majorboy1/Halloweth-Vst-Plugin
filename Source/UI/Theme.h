@@ -2,8 +2,8 @@
 
 #include <juce_gui_basics/juce_gui_basics.h>
 
-/** Shared visual language for AFRONOVA: charcoal base, violet accent, white type. */
-namespace afronova::theme
+/** Shared visual language for HALLOWETH: charcoal base, violet accent, white type. */
+namespace halloweth::theme
 {
     inline const juce::Colour background     { 0xff08080c };
     inline const juce::Colour backgroundAlt  { 0xff0e0e16 };
@@ -29,7 +29,7 @@ namespace afronova::theme
         return font (height, juce::Font::bold);
     }
 
-    /** Draws the standard AFRONOVA card panel with an optional caption. */
+    /** Draws the standard HALLOWETH card panel with an optional caption. */
     inline void drawCard (juce::Graphics& g, juce::Rectangle<int> bounds, const juce::String& title = {})
     {
         const auto area = bounds.toFloat();

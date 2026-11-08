@@ -1,7 +1,7 @@
 #include "NavigationBar.h"
 #include "Theme.h"
 
-namespace afronova
+namespace halloweth
 {
 NavigationBar::NavigationBar()
 {

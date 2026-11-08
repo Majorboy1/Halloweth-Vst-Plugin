@@ -4,9 +4,9 @@
 #include "../Knobs/LabeledKnob.h"
 #include "../Theme.h"
 
-namespace afronova
+namespace halloweth
 {
-HomePage::HomePage (AfronovaAudioProcessor& p) : processor (p)
+HomePage::HomePage (HallowethAudioProcessor& p) : processor (p)
 {
     knobs.add (new LabeledKnob ("MASTER", processor.apvts, param::masterGain));
     knobs.add (new LabeledKnob ("TONE", processor.apvts, param::tone));

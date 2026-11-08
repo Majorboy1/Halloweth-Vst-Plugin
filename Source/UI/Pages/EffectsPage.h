@@ -6,9 +6,9 @@
 #include <memory>
 #include <vector>
 
-namespace afronova
+namespace halloweth
 {
-class AfronovaAudioProcessor;
+class HallowethAudioProcessor;
 class LabeledKnob;
 
 /** Effects page: seven real processors, each with an enable switch and its own controls.
@@ -18,7 +18,7 @@ class LabeledKnob;
 class EffectsPage : public juce::Component
 {
 public:
-    explicit EffectsPage (AfronovaAudioProcessor&);
+    explicit EffectsPage (HallowethAudioProcessor&);
     ~EffectsPage() override;
 
     void paint (juce::Graphics&) override;
@@ -37,7 +37,7 @@ private:
     void addCard (const juce::String& title, const juce::String& onParameter,
                   const std::vector<std::pair<juce::String, juce::String>>& knobs);
 
-    AfronovaAudioProcessor& processor;
+    HallowethAudioProcessor& processor;
     std::vector<std::unique_ptr<Card>> cards;
 
     juce::ComboBox filterModeCombo;

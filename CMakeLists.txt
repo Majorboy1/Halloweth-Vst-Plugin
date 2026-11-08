@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(AFRONOVA VERSION 0.1.0 LANGUAGES C CXX)
+project(HALLOWETH VERSION 0.1.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -18,10 +18,10 @@ endif()
 # Prefer a local JUCE checkout (git submodule / manual clone) so builds work
 # offline and are reproducible. Falls back to a pinned download if it is absent.
 if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/JUCE/CMakeLists.txt")
-    message(STATUS "AFRONOVA: using local JUCE at ThirdParty/JUCE")
+    message(STATUS "HALLOWETH: using local JUCE at ThirdParty/JUCE")
     add_subdirectory(ThirdParty/JUCE EXCLUDE_FROM_ALL)
 else()
-    message(STATUS "AFRONOVA: ThirdParty/JUCE not found - fetching JUCE 8.0.8")
+    message(STATUS "HALLOWETH: ThirdParty/JUCE not found - fetching JUCE 8.0.8")
     include(FetchContent)
     FetchContent_Declare(JUCE
         GIT_REPOSITORY https://github.com/juce-framework/juce.git
@@ -45,7 +45,7 @@ add_subdirectory(ThirdParty/sfizz EXCLUDE_FROM_ALL)
 # ------------------------------------------------------------------------------
 # Plugin target
 # ------------------------------------------------------------------------------
-juce_add_plugin(AFRONOVA
+juce_add_plugin(HALLOWETH
     COMPANY_NAME                "Halloweth Audio"
     BUNDLE_ID                   "com.halloweth.audio.halloweth"
     PLUGIN_MANUFACTURER_CODE    Hwth
@@ -61,7 +61,7 @@ juce_add_plugin(AFRONOVA
     VST3_CATEGORIES             Instrument Synth
     FORMATS                     VST3 Standalone)
 
-target_sources(AFRONOVA PRIVATE
+target_sources(HALLOWETH PRIVATE
     Source/PluginProcessor.cpp
     Source/PluginEditor.cpp
     Source/AudioEngine/AudioEngine.cpp
@@ -75,7 +75,7 @@ target_sources(AFRONOVA PRIVATE
     Source/Effects/EffectChain.cpp
     Source/Presets/PresetManager.cpp
     Source/Presets/FactoryPresets.cpp
-    Source/UI/AfronovaLookAndFeel.cpp
+    Source/UI/HallowethLookAndFeel.cpp
     Source/UI/NavigationBar.cpp
     Source/UI/MidiActivityLight.cpp
     Source/UI/PresetBar.cpp
@@ -87,16 +87,16 @@ target_sources(AFRONOVA PRIVATE
     Source/UI/Pages/LibraryPage.cpp
     Source/UI/Pages/PlaceholderPage.cpp)
 
-target_include_directories(AFRONOVA PRIVATE Source)
+target_include_directories(HALLOWETH PRIVATE Source)
 
-target_compile_definitions(AFRONOVA PUBLIC
+target_compile_definitions(HALLOWETH PUBLIC
     JUCE_WEB_BROWSER=0
     JUCE_USE_CURL=0
     JUCE_VST3_CAN_REPLACE_VST2=0
     JUCE_REPORT_APP_USAGE=0
     JUCE_STRICT_REFCOUNTEDPOINTER=1)
 
-target_link_libraries(AFRONOVA
+target_link_libraries(HALLOWETH
     PRIVATE
         juce::juce_audio_utils
         juce::juce_audio_formats
@@ -110,61 +110,60 @@ target_link_libraries(AFRONOVA
 # Fail with an actionable message rather than a wall of compiler errors.
 if (MINGW)
     message(FATAL_ERROR
-        "AFRONOVA requires MSVC on Windows. JUCE 8 does not support MinGW.\n"
+        "HALLOWETH requires MSVC on Windows. JUCE 8 does not support MinGW.\n"
         "Install Visual Studio 2022 Build Tools with the 'Desktop development with C++' "
         "workload, then delete the build directory and reconfigure.")
 endif()
 
 if (MSVC)
     # /utf-8 keeps the non-ASCII separators used in UI strings intact.
-    target_compile_options(AFRONOVA PRIVATE /MP /permissive- /utf-8)
+    target_compile_options(HALLOWETH PRIVATE /MP /permissive- /utf-8)
 endif()
 
-add_custom_command(TARGET AFRONOVA_VST3 POST_BUILD
+add_custom_command(TARGET HALLOWETH_VST3 POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${CMAKE_CURRENT_SOURCE_DIR}/Resources/GuitarSamples"
-        "$<TARGET_FILE_DIR:AFRONOVA_VST3>/../Resources/GuitarSamples"
+        "$<TARGET_FILE_DIR:HALLOWETH_VST3>/../Resources/GuitarSamples"
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${CMAKE_CURRENT_SOURCE_DIR}/Resources/Licenses"
-        "$<TARGET_FILE_DIR:AFRONOVA_VST3>/../Resources/Licenses")
+        "$<TARGET_FILE_DIR:HALLOWETH_VST3>/../Resources/Licenses")
 
-add_custom_command(TARGET AFRONOVA_Standalone POST_BUILD
+add_custom_command(TARGET HALLOWETH_Standalone POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${CMAKE_CURRENT_SOURCE_DIR}/Resources/GuitarSamples"
-        "$<TARGET_FILE_DIR:AFRONOVA_Standalone>/Resources/GuitarSamples"
+        "$<TARGET_FILE_DIR:HALLOWETH_Standalone>/Resources/GuitarSamples"
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${CMAKE_CURRENT_SOURCE_DIR}/Resources/Licenses"
-        "$<TARGET_FILE_DIR:AFRONOVA_Standalone>/Resources/Licenses")
+        "$<TARGET_FILE_DIR:HALLOWETH_Standalone>/Resources/Licenses")
 
 # ------------------------------------------------------------------------------
 # Automated tests
 # ------------------------------------------------------------------------------
-option(AFRONOVA_BUILD_TESTS "Build the AFRONOVA engine test suite" ON)
+option(HALLOWETH_BUILD_TESTS "Build the HALLOWETH engine test suite" ON)
 
-if (AFRONOVA_BUILD_TESTS)
+if (HALLOWETH_BUILD_TESTS)
     enable_testing()
 
-    juce_add_console_app(AFRONOVA_Tests PRODUCT_NAME "AFRONOVA Tests")
+    juce_add_console_app(HALLOWETH_Tests PRODUCT_NAME "HALLOWETH Tests")
 
-    target_sources(AFRONOVA_Tests PRIVATE Tests/AudioEngineTests.cpp)
-    target_include_directories(AFRONOVA_Tests PRIVATE Source)
+    target_sources(HALLOWETH_Tests PRIVATE Tests/AudioEngineTests.cpp)
+    target_include_directories(HALLOWETH_Tests PRIVATE Source)
 
-    target_link_libraries(AFRONOVA_Tests
+    target_link_libraries(HALLOWETH_Tests
         PRIVATE
-            AFRONOVA
+            HALLOWETH
             juce::juce_audio_utils
             juce::juce_dsp
         PUBLIC
             juce::juce_recommended_config_flags)
 
-    add_custom_command(TARGET AFRONOVA_Tests POST_BUILD
+    add_custom_command(TARGET HALLOWETH_Tests POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
             "${CMAKE_CURRENT_SOURCE_DIR}/Resources/GuitarSamples"
-            "$<TARGET_FILE_DIR:AFRONOVA_Tests>/Resources/GuitarSamples"
+            "$<TARGET_FILE_DIR:HALLOWETH_Tests>/Resources/GuitarSamples"
         COMMAND ${CMAKE_COMMAND} -E copy_directory
             "${CMAKE_CURRENT_SOURCE_DIR}/Resources/Licenses"
-            "$<TARGET_FILE_DIR:AFRONOVA_Tests>/Resources/Licenses")
+            "$<TARGET_FILE_DIR:HALLOWETH_Tests>/Resources/Licenses")
 
-    add_test(NAME AudioEngine COMMAND AFRONOVA_Tests)
+    add_test(NAME AudioEngine COMMAND HALLOWETH_Tests)
 endif()
-

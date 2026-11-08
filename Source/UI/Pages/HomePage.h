@@ -2,16 +2,16 @@
 
 #include <juce_gui_basics/juce_gui_basics.h>
 
-namespace afronova
+namespace halloweth
 {
-class AfronovaAudioProcessor;
+class HallowethAudioProcessor;
 class LabeledKnob;
 
 /** Home page: build status, output meter and the master/tone controls. */
 class HomePage : public juce::Component
 {
 public:
-    explicit HomePage (AfronovaAudioProcessor&);
+    explicit HomePage (HallowethAudioProcessor&);
     ~HomePage() override;
 
     void paint (juce::Graphics&) override;
@@ -21,7 +21,7 @@ public:
     void updateMeters (float peak);
 
 private:
-    AfronovaAudioProcessor& processor;
+    HallowethAudioProcessor& processor;
 
     juce::OwnedArray<LabeledKnob> knobs;
 

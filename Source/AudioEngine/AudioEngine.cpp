@@ -3,7 +3,7 @@
 #include "SampleVoice.h"
 #include "SynthVoice.h"
 
-namespace afronova
+namespace halloweth
 {
 namespace
 {

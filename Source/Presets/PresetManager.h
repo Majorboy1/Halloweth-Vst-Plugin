@@ -5,7 +5,7 @@
 #include <memory>
 #include <vector>
 
-namespace afronova
+namespace halloweth
 {
 /** Description of one preset in the browser. */
 struct PresetInfo
@@ -34,7 +34,7 @@ struct PresetLoadResult
     Factory and user presets.
 
     Factory presets live in code (no files needed); user presets are JSON files in
-    %APPDATA%/Afronova/Presets. Each preset stores every parameter value plus the
+    %APPDATA%/Halloweth/Presets. Each preset stores every parameter value plus the
     instantiated instrument and engine mode.
 */
 class PresetManager

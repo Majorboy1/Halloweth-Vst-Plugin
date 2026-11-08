@@ -1,7 +1,7 @@
 #include "PlaceholderPage.h"
 #include "../Theme.h"
 
-namespace afronova
+namespace halloweth
 {
 PlaceholderPage::PlaceholderPage (juce::String titleText, juce::String summaryText, juce::String phaseText)
     : title (std::move (titleText)),

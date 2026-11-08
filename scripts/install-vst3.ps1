@@ -19,7 +19,7 @@ $ErrorActionPreference = "Stop"
 
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $source = Join-Path $projectRoot ("build-" + $Config.ToLowerInvariant() +
-                                  "\AFRONOVA_artefacts\$Config\VST3\AFRONOVA.vst3")
+                                  "\HALLOWETH_artefacts\$Config\VST3\HALLOWETH.vst3")
 
 if (-not (Test-Path $source)) {
     throw "VST3 bundle not found: $source`nRun scripts\build.ps1 first."
@@ -27,7 +27,7 @@ if (-not (Test-Path $source)) {
 
 New-Item -ItemType Directory -Force -Path $Destination | Out-Null
 
-$target = Join-Path $Destination "AFRONOVA.vst3"
+$target = Join-Path $Destination "HALLOWETH.vst3"
 
 if (Test-Path $target) {
     Write-Host "Replacing existing installation at $target" -ForegroundColor Yellow
@@ -36,7 +36,7 @@ if (Test-Path $target) {
 
 Copy-Item -Recurse -Path $source -Destination $Destination
 
-Write-Host "Installed AFRONOVA.vst3 -> $Destination" -ForegroundColor Green
+Write-Host "Installed HALLOWETH.vst3 -> $Destination" -ForegroundColor Green
 Write-Host ""
 Write-Host "NOTE: FL Studio only scans the shared VST3 folder" -ForegroundColor Yellow
 Write-Host "      (C:\Program Files\Common Files\VST3). This copy is for hosts that"

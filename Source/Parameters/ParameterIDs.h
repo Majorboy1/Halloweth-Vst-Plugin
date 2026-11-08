@@ -1,6 +1,6 @@
 #pragma once
 
-namespace afronova::param
+namespace halloweth::param
 {
     /** Stable parameter identifiers. These strings are part of the saved-state
         format, so they must never change once released. */

@@ -6,16 +6,16 @@
 
 #include "MidiActivityLight.h"
 
-namespace afronova
+namespace halloweth
 {
-class AfronovaAudioProcessor;
+class HallowethAudioProcessor;
 
 /** Central preset strip: name, category, description, previous/next, favourite
     and the MIDI activity lamp. */
 class PresetBar : public juce::Component
 {
 public:
-    explicit PresetBar (AfronovaAudioProcessor&);
+    explicit PresetBar (HallowethAudioProcessor&);
     ~PresetBar() override = default;
 
     void paint (juce::Graphics&) override;
@@ -30,7 +30,7 @@ public:
 private:
     void step (int delta);
 
-    AfronovaAudioProcessor& processor;
+    HallowethAudioProcessor& processor;
 
     juce::TextButton prevButton, nextButton, favouriteButton;
     juce::Label nameLabel, categoryLabel, descriptionLabel;

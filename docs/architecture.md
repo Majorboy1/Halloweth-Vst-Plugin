@@ -4,8 +4,7 @@
 
 Halloweth is a JUCE 8.0.8, C++17 VST3 and Standalone instrument built with CMake and
 Visual Studio 2022. The Release build and the current real-processor regression suite pass.
-The plugin product and bundle are named HALLOWETH; some internal CMake targets and C++
-namespaces still use the original AFRONOVA identifier.
+The plugin product, bundle, CMake targets, and C++ namespaces use the HALLOWETH name.
 
 The current audio path is:
 
@@ -95,7 +94,7 @@ Salamander piano preset is exposed in the factory browser yet.
 
 ## Build and Verification
 
-Halloweth uses `D:\devtools\afronova\cmake\bin\cmake.exe`, Visual Studio 2022 x64,
+Halloweth uses `D:\devtools\halloweth\cmake\bin\cmake.exe`, Visual Studio 2022 x64,
 JUCE 8.0.8 and sfizz pinned at `3993b5c`. The local CMake and compiler executables are not on PATH. The Salamander build
 uses the same toolchain; its JUCE path was pointed at Halloweth's cached 8.0.8 source for
 this local evaluation, so its original pinned JUCE submodule commit was not independently

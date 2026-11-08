@@ -3,9 +3,9 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_gui_basics/juce_gui_basics.h>
 
-namespace afronova
+namespace halloweth
 {
-class AfronovaAudioProcessor;
+class HallowethAudioProcessor;
 
 /** Drums page: 16 pads, per-pad level/pan/tuning and kit load/save.
 
@@ -14,7 +14,7 @@ class AfronovaAudioProcessor;
 class DrumsPage : public juce::Component
 {
 public:
-    explicit DrumsPage (AfronovaAudioProcessor&);
+    explicit DrumsPage (HallowethAudioProcessor&);
     ~DrumsPage() override;
 
     void paint (juce::Graphics&) override;
@@ -31,7 +31,7 @@ private:
     void selectPad (int padIndex);
     void refreshPadValues();
 
-    AfronovaAudioProcessor& processor;
+    HallowethAudioProcessor& processor;
 
     juce::OwnedArray<juce::TextButton> pads;
     juce::TextButton loadKitButton, saveKitButton;

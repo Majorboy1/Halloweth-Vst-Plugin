@@ -1,0 +1,24 @@
+name: Windows build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure
+        run: cmake -S . -B build -A x64 -DHALLOWETH_BUILD_TESTS=OFF
+
+      - name: Build VST3 and standalone
+        run: cmake --build build --config Release --parallel

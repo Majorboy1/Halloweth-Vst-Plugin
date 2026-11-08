@@ -1,6 +1,6 @@
 #include "EffectChain.h"
 
-namespace afronova
+namespace halloweth
 {
 void EffectChain::prepare (double newSampleRate, int maxBlockSize)
 {

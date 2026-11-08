@@ -1,7 +1,7 @@
 #include "MidiActivityLight.h"
 #include "Theme.h"
 
-namespace afronova
+namespace halloweth
 {
 MidiActivityLight::MidiActivityLight()
 {

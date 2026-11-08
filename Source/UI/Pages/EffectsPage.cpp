@@ -4,9 +4,9 @@
 #include "../Knobs/LabeledKnob.h"
 #include "../Theme.h"
 
-namespace afronova
+namespace halloweth
 {
-EffectsPage::EffectsPage (AfronovaAudioProcessor& p) : processor (p)
+EffectsPage::EffectsPage (HallowethAudioProcessor& p) : processor (p)
 {
     addCard ("REVERB", param::fxReverbOn,
              { { param::fxReverbMix, "MIX" },

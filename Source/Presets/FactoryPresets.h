@@ -2,7 +2,7 @@
 
 #include <juce_core/juce_core.h>
 
-namespace afronova
+namespace halloweth
 {
 /** One factory preset definition.
 

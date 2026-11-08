@@ -2,7 +2,7 @@
 
 #include <mutex>
 
-namespace afronova
+namespace halloweth
 {
 namespace
 {

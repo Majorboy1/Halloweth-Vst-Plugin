@@ -2,7 +2,7 @@
 
 #include "AudioEngine.h"
 
-namespace afronova
+namespace halloweth
 {
 namespace
 {
