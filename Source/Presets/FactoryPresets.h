@@ -29,10 +29,10 @@ struct FactoryPresetDefinition
     float sustain;       // %
     float release;       // ms
 
-    int engineMode;      // 0 sample map, 1 synth, 2 drums
+    int engineMode;      // 0 sample map, 1 synth, 2 drums, 3 SFZ
     bool needsSample;
 };
 
-/** The 50 factory presets. Presets that need audio say so explicitly. */
+/** The factory presets. Presets that need user audio say so explicitly. */
 const FactoryPresetDefinition* getFactoryPresetDefinitions (int& count);
 }

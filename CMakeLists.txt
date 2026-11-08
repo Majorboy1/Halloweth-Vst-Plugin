@@ -125,6 +125,9 @@ add_custom_command(TARGET HALLOWETH_VST3 POST_BUILD
         "${CMAKE_CURRENT_SOURCE_DIR}/Resources/GuitarSamples"
         "$<TARGET_FILE_DIR:HALLOWETH_VST3>/../Resources/GuitarSamples"
     COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_CURRENT_SOURCE_DIR}/Resources/PianoSamples"
+        "$<TARGET_FILE_DIR:HALLOWETH_VST3>/../Resources/PianoSamples"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${CMAKE_CURRENT_SOURCE_DIR}/Resources/Licenses"
         "$<TARGET_FILE_DIR:HALLOWETH_VST3>/../Resources/Licenses")
 
@@ -132,6 +135,9 @@ add_custom_command(TARGET HALLOWETH_Standalone POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${CMAKE_CURRENT_SOURCE_DIR}/Resources/GuitarSamples"
         "$<TARGET_FILE_DIR:HALLOWETH_Standalone>/Resources/GuitarSamples"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_CURRENT_SOURCE_DIR}/Resources/PianoSamples"
+        "$<TARGET_FILE_DIR:HALLOWETH_Standalone>/Resources/PianoSamples"
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${CMAKE_CURRENT_SOURCE_DIR}/Resources/Licenses"
         "$<TARGET_FILE_DIR:HALLOWETH_Standalone>/Resources/Licenses")
@@ -161,6 +167,9 @@ if (HALLOWETH_BUILD_TESTS)
         COMMAND ${CMAKE_COMMAND} -E copy_directory
             "${CMAKE_CURRENT_SOURCE_DIR}/Resources/GuitarSamples"
             "$<TARGET_FILE_DIR:HALLOWETH_Tests>/Resources/GuitarSamples"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${CMAKE_CURRENT_SOURCE_DIR}/Resources/PianoSamples"
+            "$<TARGET_FILE_DIR:HALLOWETH_Tests>/Resources/PianoSamples"
         COMMAND ${CMAKE_COMMAND} -E copy_directory
             "${CMAKE_CURRENT_SOURCE_DIR}/Resources/Licenses"
             "$<TARGET_FILE_DIR:HALLOWETH_Tests>/Resources/Licenses")

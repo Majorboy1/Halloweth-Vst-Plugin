@@ -22,6 +22,7 @@ Cinematic hybrid synth and premium world-instrument platform — VST3 for Window
 | MIDI input, 16-voice polyphony, pitch bend, per-voice ADSR | implemented |
 | Sample playback: WAV/AIFF/FLAC/OGG, pitch tracking, looping | implemented |
 | Multisample maps: key ranges, velocity layers, round robin, one-shot | implemented |
+| CC0 sampled upright piano: all 88 keys, four velocity layers, SFZ | implemented |
 | SFZ instruments: sfizz, async loading, MIDI events, block rendering, state recall | implemented; tested with a basic SFZ map |
 | 16-pad drum kit: per-pad level, pan, tuning, one-shot, kit JSON save/load | implemented |
 | Two-oscillator synth: PolyBLEP saw/square, sine, triangle, TPT filter | implemented |
@@ -29,15 +30,16 @@ Cinematic hybrid synth and premium world-instrument platform — VST3 for Window
 | Engine switching (sample map / synth / drums / SFZ) | implemented |
 | Effects: reverb, delay, chorus, LP/HP filter, drive, compressor, stereo width | implemented |
 | Preset browser: search, category/genre filters, favourites, save/delete, import/export | implemented |
-| 50 factory presets across pads, keys, bass, plucks, leads, textures, drums | implemented |
+| Factory presets across guitars, piano, pads, keys, bass, leads, textures, drums | implemented |
 | Asynchronous instrument loading, missing-file reporting | implemented |
 | Save/restore state, including instrument and drum kit | implemented |
 | Dark interface: navigation, preset strip, engine/drum/effect pages, keyboard, meters | implemented |
 | Automated engine tests | implemented, 102 checks passing |
 | Preset browser, vocal chops, remaining effects (phaser, flanger, EQ, transient) | **not implemented** |
 
-See [Architecture](docs/architecture.md) for the current engine boundaries, the Salamander
-Piano evaluation, licensing notes and the SFZ integration details.
+See [Architecture](docs/architecture.md) for the current engine boundaries and SFZ details.
+See the [sound library guide](docs/SOUND_LIBRARY_GUIDE.md) for guitar/piano recommendations,
+Omnisphere-style alternatives, and Afrobeats kit sources and license notes.
 
 Nothing in the interface is decorative: every control is connected to a real parameter,
 and sections that are not built show an explicit "not implemented yet" page instead of
@@ -159,7 +161,7 @@ Source/
     ParameterIDs.h          Stable parameter identifiers
   Presets/
     PresetManager.{h,cpp}   Factory + user presets, favourites, import/export
-    FactoryPresets.{h,cpp}  The 50 factory preset definitions
+    FactoryPresets.{h,cpp}  The factory preset definitions
   UI/
     Theme.h                 Colours, fonts, card drawing
     HallowethLookAndFeel     Custom knobs and buttons
@@ -179,6 +181,8 @@ scripts/
 Tests/
   AudioEngineTests.cpp      Engine, MIDI, preset and state tests
 ThirdParty/JUCE/            JUCE 8.0.8 (not redistributed with binaries)
+Resources/PianoSamples/     CC0 Meta Piano SFZ and OGG samples
+Resources/DrumKits/         External Afrobeats sample-pack sources
 ```
 
 ## 6. Presets
@@ -216,24 +220,24 @@ Factory presets live in code; user presets are JSON files in
 | 3b | Drum engine: 16 pads, per-pad level/pan/tuning, kit JSON | **done** |
 | 4 | Effects: reverb, delay, chorus, filter, drive, compressor, width | **done** |
 | 4b | Remaining effects (phaser, flanger, EQ, transient, stutter, reverse) | planned |
-| 5 | Preset browser, 50 factory presets, favourites, save/import/export | **done** |
+| 5 | Preset browser, factory presets, favourites, save/import/export | **done** |
 | 5b | Vocal chops engine and page | next |
 | 6 | Polish, automated tests, FL Studio validation, release build | planned |
 
 ## 9. Sample content and licensing
 
-The factory guitar presets use a compact subset of Meta Open Sound nylon- and steel-string
-recordings, licensed CC0 1.0; source license texts and maps are in
-`Resources/GuitarSamples/`. The SFZ engine uses the BSD-2-Clause sfizz library; licenses
-for sfizz and its linked dependencies are included under `Resources/Licenses/` and copied
-into plugin/app resources at build time. Loading an SFZ does not bundle its samples.
-Other factory instrument categories are synthesis patches or require user-supplied audio.
-No Omnisphere or other proprietary sample content is copied, extracted or redistributed.
+The factory nylon and steel guitars and the Meta Upright Piano use Meta Open Sound
+recordings under CC0 1.0. Their sample maps, source notes and license texts are in
+`Resources/GuitarSamples/` and `Resources/PianoSamples/`. The SFZ engine uses the
+BSD-2-Clause sfizz library; licenses for sfizz and its linked dependencies are included
+under `Resources/Licenses/` and copied into plugin/app resources at build time.
+Other factory instruments are synthesis patches or require user-supplied audio. No
+Omnisphere or other proprietary sample content is copied, extracted or redistributed.
 
 ## 10. Known limitations of the current build
 
-- **Only the two acoustic guitar banks ship as recordings.** Piano, drums and other
-  multisample instruments need user-supplied audio; `Resources/SampleMaps/example-multisample.json`
+- The bundled piano is an upright; sampled grand pianos, drums and other multisample
+  instruments can be loaded from user-supplied libraries. `Resources/SampleMaps/example-multisample.json`
   is a documented template.
 - Effects run as one serial master chain; there is no per-instrument routing yet.
 - Implemented effects: reverb, delay, chorus, low/high-pass filter, drive, compressor,

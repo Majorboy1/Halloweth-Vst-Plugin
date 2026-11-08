@@ -22,8 +22,8 @@ Host MIDI + APVTS parameters
 Sample files and maps are loaded away from the audio callback. Loaded sample data is
 immutable while voices may reference it. The engine supports synth, multisample map, drum
 and SFZ modes. JSON maps describe key ranges, root notes, velocity layers, round robin,
-looping and one-shot playback. Factory guitar presets use bundled Meta Open Sound
-recordings; there is still no bundled piano sample bank.
+looping and one-shot playback. Factory guitar presets and the Meta Upright Piano use
+bundled Meta Open Sound CC0 recordings.
 
 ## Salamander Evaluation
 
@@ -65,6 +65,8 @@ Source/
   Presets/                     Preset metadata and instrument references
 Resources/
   GuitarSamples/               Bundled CC0 guitar sample subset and notices
+  PianoSamples/                Bundled CC0 Meta Piano SFZ and OGG recordings
+  DrumKits/Afrobeats/           User-download sources and loading notes
   SampleMaps/                  User-facing maps and templates
   Licenses/                    Notices for each redistributed library
 Tests/                         Audio output, MIDI, load and realtime regressions

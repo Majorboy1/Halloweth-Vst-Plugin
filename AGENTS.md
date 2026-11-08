@@ -35,5 +35,7 @@ JUCE checkout contents, local environment files, or installed plugin bundles.
 - Prefer small, reviewable changes that follow the surrounding JUCE/C++ style.
 - Update `README.md` when user-facing capabilities or build instructions change.
 - Do not claim an effect, instrument, or preset capability that is not implemented.
+- Only bundle audio with a license that permits redistribution in a plugin; include
+  its source, exact license, and required attribution beside the samples.
 - Run the existing test executable after audio engine, parameter, state, or preset
   changes when the task asks for verification.

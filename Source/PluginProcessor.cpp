@@ -77,6 +77,22 @@ namespace
 
         return candidates[0];
     }
+
+    juce::String getPortableInstrumentPath (const juce::File& instrumentFile)
+    {
+        const auto moduleFolder = getPluginModuleFile().getParentDirectory();
+        const juce::File resourceFolders[]
+        {
+            moduleFolder.getChildFile ("Resources"),
+            moduleFolder.getParentDirectory().getChildFile ("Resources")
+        };
+
+        for (const auto& resourceFolder : resourceFolders)
+            if (instrumentFile.isAChildOf (resourceFolder))
+                return "@HALLOWETH_RESOURCE:" + instrumentFile.getRelativePathFrom (resourceFolder);
+
+        return instrumentFile.getFullPathName();
+    }
 }
 
 HallowethAudioProcessor::HallowethAudioProcessor()
@@ -431,7 +447,7 @@ void HallowethAudioProcessor::loadInstrumentForPreset (const PresetLoadResult& r
 
     if (result.instrumentIsSfz)
     {
-        loadSfzFileAsync (juce::File (result.instrumentPath));
+        loadSfzFileAsync (resolveBundledInstrument (result.instrumentPath));
         return;
     }
 
@@ -853,7 +869,7 @@ void HallowethAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
     }
 
     if (loadedSfzFile.existsAsFile())
-        state.setProperty ("sfzPath", loadedSfzFile.getFullPathName(), nullptr);
+        state.setProperty ("sfzPath", getPortableInstrumentPath (loadedSfzFile), nullptr);
     else
         state.removeProperty ("sfzPath", nullptr);
 
@@ -891,7 +907,7 @@ void HallowethAudioProcessor::setStateInformation (const void* data, int sizeInB
 
     if (sfzPath.isNotEmpty())
     {
-        const juce::File file (sfzPath);
+        const auto file = resolveBundledInstrument (sfzPath);
 
         if (file.existsAsFile())
             loadSfzFileAsync (file);

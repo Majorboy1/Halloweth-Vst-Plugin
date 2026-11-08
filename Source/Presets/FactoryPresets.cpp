@@ -148,6 +148,8 @@ namespace
           2, 3, 18, 2000, 0.7f, 0, 14, 22, 8, 5, 320, 45, 480, 1, false },
         { "Moonlit Piano", "Piano", "Neo Soul", "Soft melodic piano with a dreamy tail.",
           3, 5, 28, 3300, 0.9f, 0, 20, 30, 0, 15, 680, 72, 980, 1, false },
+        { "Meta Upright Piano", "Piano", "Acoustic", "Full 88-key felt-damped upright with four recorded velocity layers.",
+          0, 0, 0, 12000, 0.707f, 0, 0, 0, 0, 4, 180, 80, 500, 3, false },
 
         // ---- Brass and winds -----------------------------------------------
         { "Real Saxophone", "Saxophone", "Jazz", "Rounded alto-sax-like tone with breathy movement.",

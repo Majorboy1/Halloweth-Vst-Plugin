@@ -24,6 +24,7 @@ namespace
     juce::var makeFactoryData (const FactoryPresetDefinition& definition)
     {
         const auto isGuitar = juce::String (definition.category) == "Guitars";
+        const auto isBundledPiano = juce::String (definition.name) == "Meta Upright Piano";
         const auto guitarMap = juce::String (definition.name).contains ("Steel")
                                    ? "steel-guitar/steel-guitar.json"
                                    : "nylon-guitar/nylon-guitar.json";
@@ -34,12 +35,14 @@ namespace
         root->setProperty ("genre", definition.genre);
         root->setProperty ("description", definition.description);
         root->setProperty ("needsSample", definition.needsSample);
-        root->setProperty ("engineMode", isGuitar ? 0 : definition.engineMode);
+        root->setProperty ("engineMode", isGuitar ? 0 : isBundledPiano ? 3 : definition.engineMode);
         root->setProperty ("instrumentPath", isGuitar
                               ? "@HALLOWETH_RESOURCE:GuitarSamples/" + juce::String (guitarMap)
-                              : juce::String());
+                              : isBundledPiano
+                                  ? "@HALLOWETH_RESOURCE:PianoSamples/meta-piano/meta-piano.sfz"
+                                  : juce::String());
         root->setProperty ("instrumentIsMap", isGuitar);
-        root->setProperty ("instrumentIsSfz", false);
+        root->setProperty ("instrumentIsSfz", isBundledPiano);
         root->setProperty ("isFactory", true);
 
         juce::DynamicObject::Ptr parameters (new juce::DynamicObject());
