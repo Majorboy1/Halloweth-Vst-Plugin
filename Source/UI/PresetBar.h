@@ -26,6 +26,7 @@ public:
     void refreshFromProcessor();
 
     std::function<void()> onPresetChanged;
+    std::function<void()> onFavouriteChanged;
 
 private:
     void step (int delta);

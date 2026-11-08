@@ -28,6 +28,9 @@ PresetBar::PresetBar (HallowethAudioProcessor& p) : processor (p)
     {
         processor.togglePresetFavourite (processor.getCurrentPresetIndex());
         refreshFromProcessor();
+
+        if (onFavouriteChanged != nullptr)
+            onFavouriteChanged();
     };
 
     nameLabel.setFont (theme::boldFont (19.0f));

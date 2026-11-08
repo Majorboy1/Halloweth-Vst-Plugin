@@ -175,6 +175,7 @@ private:
     std::atomic<int> activeVoices { 0 };
     std::atomic<float> outputPeak { 0.0f };
     std::atomic<int> currentPreset { 0 };
+    bool instrumentOverride = false;
 
     // Loading state (message thread owns these; the worker only touches its job).
     std::shared_ptr<InstrumentLoadJob> pendingJob;

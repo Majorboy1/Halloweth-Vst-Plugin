@@ -38,6 +38,7 @@ HallowethAudioProcessorEditor::HallowethAudioProcessorEditor (HallowethAudioProc
     addAndMakeVisible (keyboard);
 
     navBar.onPageSelected = [this] (NavigationBar::Page page) { showPage (page); };
+    presetBar.onFavouriteChanged = [this] { libraryPage.refresh(); };
 
     keyboard.setAvailableRange (24, 108);
     keyboard.setLowestVisibleKey (36);

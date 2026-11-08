@@ -55,6 +55,9 @@ public:
     /** Applies preset parameters to the plugin. Message thread only. */
     PresetLoadResult applyPreset (int index, juce::AudioProcessorValueTreeState& apvts);
 
+    /** Returns the instrument reference without applying or changing parameters. */
+    PresetLoadResult getInstrumentForPreset (int index) const;
+
     bool saveUserPreset (const juce::String& name,
                          const juce::String& category,
                          const juce::String& genre,

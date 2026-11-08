@@ -253,6 +253,26 @@ int main()
         check (std::abs (processor.apvts.getRawParameterValue (halloweth::param::engineMode)->load() - 3.0f) < 0.01f,
                "recorded guitar performance selects the SFZ sample engine");
 
+        juce::MemoryBlock immediatelySavedPreset;
+        processor.getStateInformation (immediatelySavedPreset);
+
+        halloweth::HallowethAudioProcessor restoredPreset;
+        restoredPreset.setPlayConfigDetails (0, 2, sampleRate, blockSize);
+        restoredPreset.prepareToPlay (sampleRate, blockSize);
+        restoredPreset.setStateInformation (immediatelySavedPreset.getData(),
+                                            (int) immediatelySavedPreset.getSize());
+
+        for (int attempt = 0; attempt < 1000 && restoredPreset.getSfzNumRegions() == 0; ++attempt)
+        {
+            juce::Thread::sleep (10);
+            restoredPreset.pollSampleLoad();
+        }
+
+        check (restoredPreset.getCurrentPresetIndex() == afroGuitarPreset,
+               "project state restores the selected sampled preset");
+        check (restoredPreset.getSfzFilePath().endsWithIgnoreCase ("emily_chords.sfz"),
+               "project state restores the newly selected guitar instead of the previous sample");
+
         for (int attempt = 0; attempt < 1000 && processor.getSfzNumRegions() == 0; ++attempt)
         {
             juce::Thread::sleep (10);

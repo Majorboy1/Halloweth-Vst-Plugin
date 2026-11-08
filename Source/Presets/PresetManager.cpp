@@ -213,6 +213,10 @@ bool PresetManager::isFavourite (const juce::String& name) const
 
 void PresetManager::toggleFavourite (const juce::String& name)
 {
+    // Another open plugin instance may have changed the shared list since this
+    // instance was created. Merge from disk before applying this toggle.
+    loadFavourites();
+
     if (favourites.contains (name))
         favourites.removeString (name);
     else
@@ -231,10 +235,8 @@ const PresetInfo& PresetManager::getPreset (int index) const
 
 PresetLoadResult PresetManager::applyPreset (int index, juce::AudioProcessorValueTreeState& apvts)
 {
-    PresetLoadResult result;
-
     if (! juce::isPositiveAndBelow (index, (int) presets.size()))
-        return result;
+        return {};
 
     const auto& entry = presets[(size_t) index];
     const auto data = entry.data;
@@ -253,15 +255,27 @@ PresetLoadResult PresetManager::applyPreset (int index, juce::AudioProcessorValu
         }
     }
 
+    const auto result = getInstrumentForPreset (index);
+
+    if (auto* modeParameter = apvts.getParameter (param::engineMode))
+        modeParameter->setValueNotifyingHost (modeParameter->convertTo0to1 ((float) result.engineMode));
+
+    return result;
+}
+
+PresetLoadResult PresetManager::getInstrumentForPreset (int index) const
+{
+    PresetLoadResult result;
+
+    if (! juce::isPositiveAndBelow (index, (int) presets.size()))
+        return result;
+
+    const auto data = presets[(size_t) index].data;
     result.engineMode = (int) data.getProperty ("engineMode", 1);
     result.instrumentPath = data.getProperty ("instrumentPath", juce::var()).toString();
     result.instrumentIsMap = (bool) data.getProperty ("instrumentIsMap", false);
     result.instrumentIsSfz = (bool) data.getProperty ("instrumentIsSfz", false);
     result.instrumentIsDrumKit = (bool) data.getProperty ("instrumentIsDrumKit", false);
-
-    if (auto* modeParameter = apvts.getParameter (param::engineMode))
-        modeParameter->setValueNotifyingHost (modeParameter->convertTo0to1 ((float) result.engineMode));
-
     return result;
 }
 

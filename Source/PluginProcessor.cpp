@@ -442,8 +442,24 @@ int HallowethAudioProcessor::getSfzNumRegions() const noexcept
 
 void HallowethAudioProcessor::loadInstrumentForPreset (const PresetLoadResult& result)
 {
+    if (! result.instrumentIsDrumKit)
+    {
+        audioEngine.clearDrumInstrument();
+        drumKit = DrumKit();
+        hasDrumInstrument = false;
+        drumStatus = "No kit loaded";
+        drumError.clear();
+        drumKitRevision.fetch_add (1, std::memory_order_relaxed);
+    }
+
+    if (result.instrumentIsDrumKit)
+        clearSample();
+
     if (result.instrumentPath.isEmpty())
+    {
+        clearSample();
         return;
+    }
 
     if (result.instrumentIsDrumKit)
     {
@@ -484,6 +500,7 @@ void HallowethAudioProcessor::applyPreset (int index)
     const auto result = presetManager.applyPreset (index, apvts);
     loadInstrumentForPreset (result);
     currentPreset.store (index, std::memory_order_relaxed);
+    instrumentOverride = false;
 }
 
 void HallowethAudioProcessor::selectNextPreset (int delta)
@@ -527,6 +544,7 @@ void HallowethAudioProcessor::saveCurrentAsPreset (const juce::String& name,
     if (presetManager.saveUserPreset (name, category, genre, description, false, apvts,
                                       instrumentPath, isMap, isSfz))
     {
+        instrumentOverride = false;
         const auto index = findPresetByName (name.trim());
 
         if (index >= 0)
@@ -631,6 +649,7 @@ void HallowethAudioProcessor::startLoad (std::shared_ptr<InstrumentLoadJob> job)
 
 void HallowethAudioProcessor::loadSampleFileAsync (const juce::File& file)
 {
+    instrumentOverride = true;
     auto job = std::make_shared<InstrumentLoadJob>();
     job->kind = InstrumentLoadJob::Kind::singleSample;
     job->file = file;
@@ -639,6 +658,7 @@ void HallowethAudioProcessor::loadSampleFileAsync (const juce::File& file)
 
 void HallowethAudioProcessor::loadSampleMapAsync (const juce::File& mapFile)
 {
+    instrumentOverride = true;
     auto job = std::make_shared<InstrumentLoadJob>();
     job->kind = InstrumentLoadJob::Kind::map;
     job->file = mapFile;
@@ -647,6 +667,7 @@ void HallowethAudioProcessor::loadSampleMapAsync (const juce::File& mapFile)
 
 void HallowethAudioProcessor::loadSfzFileAsync (const juce::File& sfzFile)
 {
+    instrumentOverride = true;
     auto job = std::make_shared<InstrumentLoadJob>();
     job->kind = InstrumentLoadJob::Kind::sfz;
     job->file = sfzFile;
@@ -657,6 +678,7 @@ void HallowethAudioProcessor::loadSfzFileAsync (const juce::File& sfzFile)
 
 void HallowethAudioProcessor::loadDrumKitAsync (const juce::File& kitFile)
 {
+    instrumentOverride = true;
     auto job = std::make_shared<InstrumentLoadJob>();
     job->kind = InstrumentLoadJob::Kind::drumKit;
     job->file = kitFile;
@@ -668,6 +690,8 @@ void HallowethAudioProcessor::loadDrumPadSampleAsync (int padIndex, const juce::
 {
     if (! juce::isPositiveAndBelow (padIndex, DrumKit::numPads))
         return;
+
+    instrumentOverride = true;
 
     auto job = std::make_shared<InstrumentLoadJob>();
     job->kind = InstrumentLoadJob::Kind::drumPad;
@@ -743,6 +767,7 @@ void HallowethAudioProcessor::applyAllPadAdjustments()
 
 void HallowethAudioProcessor::clearSample()
 {
+    instrumentOverride = true;
     audioEngine.clearInstrument();
     sfzEngine->clear();
     loadedInstrument.reset();
@@ -861,29 +886,99 @@ void HallowethAudioProcessor::pollSampleLoad()
 void HallowethAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
     auto state = apvts.copyState();
+    const auto presetIndex = getCurrentPresetIndex();
+    const auto presetName = getPresetInfo (presetIndex).name;
+    const auto job = pendingJob;
+    const auto savingSelectedPreset = ! instrumentOverride
+                                      && juce::isPositiveAndBelow (presetIndex,
+                                                                  presetManager.getNumPresets());
 
-    if (loadedInstrument != nullptr)
-    {
-        state.setProperty ("instrumentPath", loadedInstrument->sourcePath, nullptr);
-        state.setProperty ("instrumentIsMap",
-                           loadedInstrument->sourcePath.endsWithIgnoreCase (".json"), nullptr);
-    }
-    else
-    {
-        state.removeProperty ("instrumentPath", nullptr);
-        state.removeProperty ("instrumentIsMap", nullptr);
-    }
-
-    if (loadedSfzFile.existsAsFile())
-        state.setProperty ("sfzPath", getPortableInstrumentPath (loadedSfzFile), nullptr);
-    else
-        state.removeProperty ("sfzPath", nullptr);
-
-    if (! drumKit.isEmpty())
-        state.setProperty ("drumKit", drumKit.toJson(), nullptr);
-
-    const auto presetName = getPresetInfo (getCurrentPresetIndex()).name;
     state.setProperty ("presetName", presetName, nullptr);
+    state.setProperty ("instrumentOverride", instrumentOverride, nullptr);
+
+    if (savingSelectedPreset)
+    {
+        const auto instrument = presetManager.getInstrumentForPreset (presetIndex);
+
+        if (instrument.instrumentIsSfz)
+        {
+            state.setProperty ("sfzPath", instrument.instrumentPath, nullptr);
+            state.removeProperty ("instrumentPath", nullptr);
+            state.removeProperty ("instrumentIsMap", nullptr);
+        }
+        else if (instrument.instrumentPath.isNotEmpty() && ! instrument.instrumentIsDrumKit)
+        {
+            state.setProperty ("instrumentPath", instrument.instrumentPath, nullptr);
+            state.setProperty ("instrumentIsMap", instrument.instrumentIsMap, nullptr);
+            state.removeProperty ("sfzPath", nullptr);
+        }
+        else
+        {
+            state.removeProperty ("instrumentPath", nullptr);
+            state.removeProperty ("instrumentIsMap", nullptr);
+            state.removeProperty ("sfzPath", nullptr);
+        }
+    }
+    else
+    {
+        const auto sampleLoadPending = job != nullptr
+                                       && (job->kind == InstrumentLoadJob::Kind::singleSample
+                                           || job->kind == InstrumentLoadJob::Kind::map);
+        const auto sfzLoadPending = job != nullptr && job->kind == InstrumentLoadJob::Kind::sfz;
+
+        if (sampleLoadPending)
+        {
+            state.setProperty ("instrumentPath", getPortableInstrumentPath (job->file), nullptr);
+            state.setProperty ("instrumentIsMap", job->kind == InstrumentLoadJob::Kind::map, nullptr);
+            state.removeProperty ("sfzPath", nullptr);
+        }
+        else if (sfzLoadPending)
+        {
+            state.setProperty ("sfzPath", getPortableInstrumentPath (job->file), nullptr);
+            state.removeProperty ("instrumentPath", nullptr);
+            state.removeProperty ("instrumentIsMap", nullptr);
+        }
+        else
+        {
+            if (loadedInstrument != nullptr)
+            {
+                const juce::File loadedFile (loadedInstrument->sourcePath);
+                state.setProperty ("instrumentPath", getPortableInstrumentPath (loadedFile), nullptr);
+                state.setProperty ("instrumentIsMap",
+                                   loadedInstrument->sourcePath.endsWithIgnoreCase (".json"), nullptr);
+            }
+            else
+            {
+                state.removeProperty ("instrumentPath", nullptr);
+                state.removeProperty ("instrumentIsMap", nullptr);
+            }
+
+            if (loadedSfzFile.existsAsFile())
+                state.setProperty ("sfzPath", getPortableInstrumentPath (loadedSfzFile), nullptr);
+            else
+                state.removeProperty ("sfzPath", nullptr);
+        }
+    }
+
+    state.removeProperty ("drumKitPath", nullptr);
+
+    if (job != nullptr && job->kind == InstrumentLoadJob::Kind::drumKit)
+    {
+        state.removeProperty ("drumKit", nullptr);
+        state.setProperty ("drumKitPath", getPortableInstrumentPath (job->file), nullptr);
+    }
+    else if (job != nullptr && job->kind == InstrumentLoadJob::Kind::drumKitJson)
+    {
+        state.setProperty ("drumKit", job->jsonText, nullptr);
+    }
+    else if (job != nullptr && job->kind == InstrumentLoadJob::Kind::drumPad)
+    {
+        state.setProperty ("drumKit", job->kit.toJson(), nullptr);
+    }
+    else if (! drumKit.isEmpty())
+        state.setProperty ("drumKit", drumKit.toJson(), nullptr);
+    else
+        state.removeProperty ("drumKit", nullptr);
 
     if (auto xml = state.createXml())
         copyXmlToBinary (*xml, destData);
@@ -906,12 +1001,24 @@ void HallowethAudioProcessor::setStateInformation (const void* data, int sizeInB
     const auto presetName = tree.getProperty ("presetName", juce::var()).toString();
     const auto presetIndex = findPresetByName (presetName);
     currentPreset.store (presetIndex >= 0 ? presetIndex : 0, std::memory_order_relaxed);
+    const auto selectedPresetInstrument = presetManager.getInstrumentForPreset (presetIndex);
+    const auto savedInstrumentOverride = (bool) tree.getProperty ("instrumentOverride", presetIndex < 0);
 
     const auto instrumentPath = tree.getProperty ("instrumentPath", juce::var()).toString();
     const auto isMap = (bool) tree.getProperty ("instrumentIsMap", false);
     const auto sfzPath = tree.getProperty ("sfzPath", juce::var()).toString();
+    const auto kitJson = tree.getProperty ("drumKit", juce::var()).toString();
+    const auto kitPath = tree.getProperty ("drumKitPath", juce::var()).toString();
+    const auto hasSavedDrumKit = kitJson.isNotEmpty() || kitPath.isNotEmpty();
 
-    if (sfzPath.isNotEmpty())
+    if (! savedInstrumentOverride && presetIndex >= 0)
+    {
+        if (selectedPresetInstrument.instrumentIsDrumKit && hasSavedDrumKit)
+            clearSample();
+        else
+            loadInstrumentForPreset (selectedPresetInstrument);
+    }
+    else if (sfzPath.isNotEmpty())
     {
         const auto file = resolveBundledInstrument (sfzPath);
 
@@ -924,13 +1031,9 @@ void HallowethAudioProcessor::setStateInformation (const void* data, int sizeInB
             sampleRevision.fetch_add (1, std::memory_order_relaxed);
         }
     }
-    else if (instrumentPath.isEmpty())
+    else if (instrumentPath.isNotEmpty())
     {
-        clearSample();
-    }
-    else if (loadedInstrument == nullptr || loadedInstrument->sourcePath != instrumentPath)
-    {
-        const juce::File file (instrumentPath);
+        const auto file = resolveBundledInstrument (instrumentPath);
 
         if (file.existsAsFile())
         {
@@ -946,8 +1049,10 @@ void HallowethAudioProcessor::setStateInformation (const void* data, int sizeInB
             sampleRevision.fetch_add (1, std::memory_order_relaxed);
         }
     }
-
-    const auto kitJson = tree.getProperty ("drumKit", juce::var()).toString();
+    else
+    {
+        clearSample();
+    }
 
     if (kitJson.isNotEmpty())
     {
@@ -956,6 +1061,25 @@ void HallowethAudioProcessor::setStateInformation (const void* data, int sizeInB
         job->jsonText = kitJson;
         startLoad (job);
     }
+    else if (kitPath.isNotEmpty())
+    {
+        loadDrumKitAsync (resolveBundledInstrument (kitPath));
+    }
+    else if (selectedPresetInstrument.instrumentIsDrumKit)
+    {
+        loadInstrumentForPreset (selectedPresetInstrument);
+    }
+    else
+    {
+        audioEngine.clearDrumInstrument();
+        drumKit = DrumKit();
+        hasDrumInstrument = false;
+        drumStatus = "No kit loaded";
+        drumError.clear();
+        drumKitRevision.fetch_add (1, std::memory_order_relaxed);
+    }
+
+    instrumentOverride = savedInstrumentOverride;
 }
 }
 
